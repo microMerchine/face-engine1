@@ -172,8 +172,6 @@ const (
 	EnableIRLiveness = C.ASF_IR_LIVENESS
 	// EnableImageQuality 开启单人脸图片质量检测
 	EnableImageQuality = C.ASF_IMAGEQUALITY
-	// EnableFaceShelter 开启遮挡检测
-	EnableFaceShelter = C.ASF_FACESHELTER
 	// EnableMaskDetect 开启口罩检测
 	EnableMaskDetect = C.ASF_MASKDETECT
 	// EnableUpdateFaceData 开启人脸数据更新

@@ -561,23 +561,6 @@ func (engine *FaceEngine) GetGender() (GenderInfo, error) {
 	}, nil
 }
 
-// GetFace3DAngle 获取3D角度信息
-func (engine *FaceEngine) GetFace3DAngle() (Face3DAngle, error) {
-	asfFace3DAngle := &C.ASF_Face3DAngle{}
-	r := C.ASFGetFace3DAngle((C.MHandle)(engine.handle), asfFace3DAngle)
-	if r != C.MOK {
-		return Face3DAngle{}, newError(int(r), "获取3D角度信息失败")
-	}
-	num := int32(asfFace3DAngle.num)
-	return Face3DAngle{
-		Roll:  (*[10]float32)(unsafe.Pointer(asfFace3DAngle.roll))[:num:num],
-		Yaw:   (*[10]float32)(unsafe.Pointer(asfFace3DAngle.yaw))[:num:num],
-		Pitch: (*[10]float32)(unsafe.Pointer(asfFace3DAngle.pitch))[:num:num],
-		//Status: (*[10]int32)(unsafe.Pointer(asfFace3DAngle.status))[:num:num],
-		Num: int32(asfFace3DAngle.num),
-	}, nil
-}
-
 // GetLivenessScore 获取RGB活体结果
 func (engine *FaceEngine) GetLivenessScore() (LivenessInfo, error) {
 	asfLivenessInfo := &C.ASF_LivenessInfo{}
@@ -617,28 +600,6 @@ func (engine *FaceEngine) GetMask() (maskInfo MaskInfo, err error) {
 	return MaskInfo{
 		MaskArray: (*[10]int32)(unsafe.Pointer(asfMaskInfo.maskArray))[:num:num],
 		Num:       num,
-	}, nil
-}
-
-// GetFaceLandMarkInfo 获取额头区域位置
-func (engine *FaceEngine) GetFaceLandMarkInfo() (landMarkInfo LandMarkInfo, err error) {
-	asfLandMarkInfo := &C.ASF_LandMarkInfo{}
-	r := C.ASFGetFaceLandMark(engine.handle, asfLandMarkInfo)
-	if r != C.MOK {
-		return landMarkInfo, newError(int(r), "获取额头区域位置失败")
-	}
-	num := int32(asfLandMarkInfo.num)
-	asfPoint := (*[10]C.ASF_FaceLandmark)(unsafe.Pointer(asfLandMarkInfo.point))[:num:num]
-	point := make([]FaceLandMark, num)
-	for i := int32(0); i < num; i++ {
-		point[i] = FaceLandMark{
-			PosX: float32(asfPoint[i].x),
-			PosY: float32(asfPoint[i].y),
-		}
-	}
-	return LandMarkInfo{
-		Point: point,
-		Num:   num,
 	}, nil
 }
 
@@ -689,15 +650,6 @@ func (engine *FaceEngine) ImageQualityDetect(
 		err = newError(int(r), "单人脸图片质量检测失败")
 	}
 	return confidenceLevel, err
-}
-
-// SetFaceShelterParam 设置遮挡算法检测的阈值
-func (engine *FaceEngine) SetFaceShelterParam(shelterThreshhold float32) (err error) {
-	r := C.ASFSetFaceShelterParam(engine.handle, C.MFloat(shelterThreshhold))
-	if r != C.MOK {
-		err = newError(int(r), "设置遮挡算法检测阈值失败")
-	}
-	return
 }
 
 // Destroy 销毁引擎

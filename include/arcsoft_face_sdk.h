@@ -40,23 +40,23 @@ extern "C" {
 #define ASF_MAX_DETECTFACENUM   50          //该版本最大支持同时检测50张人脸
 
 	//检测模式
-	enum ASF_DetectMode{
+	typedef enum __tag_ASF_DetectMode{
 		ASF_DETECT_MODE_VIDEO = 0x00000000,		//Video模式，一般用于多帧连续检测
 		ASF_DETECT_MODE_IMAGE = 0xFFFFFFFF		//Image模式，一般用于静态图的单次检测
-	};
+	} ASF_DetectMode;
 
 
 	//检测时候人脸角度的优先级，在文档中初始化接口中有图示说明，请参考
-	enum ASF_OrientPriority {
+	typedef enum __tag_ASF_OrientPriority {
 		ASF_OP_0_ONLY = 0x1,		// 常规预览下正方向
 		ASF_OP_90_ONLY = 0x2,		// 基于0°逆时针旋转90°的方向
 		ASF_OP_270_ONLY = 0x3,		// 基于0°逆时针旋转270°的方向
 		ASF_OP_180_ONLY = 0x4,		// 基于0°旋转180°的方向（逆时针、顺时针效果一样）
 		ASF_OP_ALL_OUT = 0x5		// 全角度
-	};
+	} ASF_OrientPriority;
 
 	//orientation 角度，逆时针方向
-	enum ASF_OrientCode {
+	typedef enum __tag_ASF_OrientCode {
 		ASF_OC_0 = 0x1,			// 0 degree
 		ASF_OC_90 = 0x2,		// 90 degree
 		ASF_OC_270 = 0x3,		// 270 degree
@@ -69,24 +69,24 @@ extern "C" {
 		ASF_OC_240 = 0xa,		// 240 degree
 		ASF_OC_300 = 0xb,		// 300 degree
 		ASF_OC_330 = 0xc		// 330 degree
-	};
+	} ASF_OrientCode;
 
 	//检测模型
-	enum ASF_DetectModel {
+	typedef enum __tag_ASF_DetectModel {
 		ASF_DETECT_MODEL_RGB = 0x1	//RGB图像检测模型
 		//预留扩展其他检测模型
-	};
+	} ASF_DetectModel;
 
 	//人脸比对可选的模型
-	enum ASF_CompareModel{
+	typedef enum __tag_ASF_CompareModel{
 		ASF_LIFE_PHOTO = 0x1,	//用于生活照之间的特征比对，推荐阈值0.80
 		ASF_ID_PHOTO = 0x2		//用于证件照或生活照与证件照之间的特征比对，推荐阈值0.82
-	};
+	} ASF_CompareModel;
 
-	enum ASF_RegisterOrNot{
+	typedef enum __tag_ASF_RegisterOrNot{
 		ASF_RECOGNITION = 0x0,  //用于识别照人脸特征提取
 		ASF_REGISTER = 0x1      //用于注册照人脸特征提取
-	};
+	} ASF_RegisterOrNot;
 
 	//版本信息
 	typedef struct {

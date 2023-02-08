@@ -137,7 +137,7 @@ typedef struct {
     MRECT *foreheadRect;           // 人脸额头区域
     ASF_FaceAttributeInfo faceAttributeInfo;      // 人脸属性信息
     ASF_Face3DAngleInfo face3DAngleInfo;        // 人脸3D角度
-} ASF_MultiFaceInfo, *LPASF_MultiFaceInfo;
+} ASF_MultiFaceInfo, LPASF_MultiFaceInfo;
 
 // 激活文件信息
 typedef struct {

@@ -166,14 +166,10 @@ const (
 	EnableAge = C.ASF_AGE
 	// EnableGender 开启性别检测
 	EnableGender = C.ASF_GENDER
-	// EnableFace3DAngle 开启人脸3D角度检测
-	EnableFace3DAngle = C.ASF_FACE3DANGLE
 	// EnableLiveness 开启活体检测
 	EnableLiveness = C.ASF_LIVENESS
 	// EnableIRLiveness 开启IR活体检测
 	EnableIRLiveness = C.ASF_IR_LIVENESS
-	// EnableFaceLandMark 开启人脸特征点检测
-	EnableFaceLandMark = C.ASF_FACELANDMARK
 	// EnableImageQuality 开启单人脸图片质量检测
 	EnableImageQuality = C.ASF_IMAGEQUALITY
 	// EnableFaceShelter 开启遮挡检测

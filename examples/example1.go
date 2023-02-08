@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	. "github.com/windosx/face-engine/v4"
-	"github.com/windosx/face-engine/v4/util"
+	. "github.com/loouss/face-engine1/v4"
+	"github.com/loouss/face-engine1/v4/util"
 )
 
 var imageInfo = util.GetResizedImageInfo("./mask.jpg")
@@ -19,7 +19,7 @@ func main() {
 	engine, err := NewFaceEngine(DetectModeImage,
 		OrientPriority0,
 		10, // 4.0最大支持10个人脸
-		EnableFaceDetect|EnableFaceRecognition|EnableFace3DAngle|EnableLiveness|EnableIRLiveness|EnableAge|EnableGender|EnableMaskDetect|EnableFaceLandMark)
+		EnableFaceDetect|EnableFaceRecognition|EnableLiveness|EnableIRLiveness|EnableAge|EnableGender|EnableMaskDetect)
 	if err != nil {
 		fmt.Printf("%#v\n", err)
 		return
@@ -36,7 +36,7 @@ func main() {
 		return
 	}
 	// 处理人脸数据
-	if err = engine.Process(imageInfo.Width, imageInfo.Height, ColorFormatBGR24, imageInfo.DataUInt8, info, EnableAge|EnableGender|EnableFace3DAngle|EnableLiveness|EnableMaskDetect|EnableFaceLandMark); err != nil {
+	if err = engine.Process(imageInfo.Width, imageInfo.Height, ColorFormatBGR24, imageInfo.DataUInt8, info, EnableAge|EnableGender|EnableLiveness|EnableMaskDetect); err != nil {
 		fmt.Printf("%#v\n", err)
 		return
 	}
@@ -54,13 +54,6 @@ func main() {
 		return
 	}
 	fmt.Printf("口罩信息：%#v\n", maskInfo)
-	// 获取额头点位
-	landMark, err := engine.GetFaceLandMarkInfo()
-	if err != nil {
-		fmt.Printf("%#v\n", err)
-		return
-	}
-	fmt.Printf("额头点位：%#v\n", landMark)
 	// 销毁引擎
 	if err = engine.Destroy(); err != nil {
 		fmt.Printf("%#v\n", err)

@@ -38,6 +38,8 @@
 #define MERR_NO_DISKSPACE				(MERR_BASIC_BASE+10)			//存贮空间不足
 #define	MERR_COMPONENT_NOT_EXIST		(MERR_BASIC_BASE+11)			//组件不存在
 #define	MERR_GLOBAL_DATA_NOT_EXIST		(MERR_BASIC_BASE+12)			//全局数据不存在
+#define MERRP_IMGCODEC					(MERR_BASIC_BASE+13)			//图像错误
+#define MERR_FILE_GENERAL				(MERR_BASIC_BASE+14)            //文件错误
 
 #define MERR_FSDK_BASE							0X7000					//Free SDK通用错误类型
 #define MERR_FSDK_INVALID_APP_ID				(MERR_FSDK_BASE+1)		//无效的App Id
@@ -76,7 +78,8 @@
 #define MERR_FSDK_FACEFEATURE_EXPIRED	            (MERR_FSDK_FACEFEATURE_ERROR_BASE+6)	//人脸特征检测结果操作过期
 #define MERR_FSDK_FACEFEATURE_MISSFACE	            (MERR_FSDK_FACEFEATURE_ERROR_BASE+7)	//人脸特征检测人脸丢失
 #define MERR_FSDK_FACEFEATURE_NO_FACE               (MERR_FSDK_FACEFEATURE_ERROR_BASE+8)	//人脸特征检测没有人脸
-#define MERR_FSDK_FACEFEATURE_FACEDATE              (MERR_FSDK_FACEFEATURE_ERROR_BASE+9)	//人脸特征检测人脸信息错误
+#define MERR_FSDK_FACEFEATURE_FACEDATD              (MERR_FSDK_FACEFEATURE_ERROR_BASE+9)	//人脸特征检测人脸信息错误
+#define MERR_FSDK_FACEFEATURE_STATUES_ERROR			(MERR_FSDK_FACEFEATURE_ERROR_BASE+10)   //人脸特征检测人脸状态错误
 
 #define MERR_ASF_EX_BASE								0x15000							//ASF错误类型
 #define MERR_ASF_EX_FEATURE_UNSUPPORTED_ON_INIT			(MERR_ASF_EX_BASE+1)			//Engine不支持的检测属性
@@ -148,6 +151,15 @@
 #define MERR_ASF_LICENSE_FILE_EXPIRED					(MERR_ASF_OFFLINE_BASE+6)		//离线授权文件已过期
 #define MERR_ASF_LOCAL_EXIST_USEFUL_ACTIVE_FILE			(MERR_ASF_OFFLINE_BASE+7)		//离线授权文件不可用，本地原有激活文件可继续使用
 #define MERR_ASF_LICENSE_FILE_VERSION_TOO_LOW			(MERR_ASF_OFFLINE_BASE+8)		//离线授权文件版本过低，请使用新版本激活助手重新进行离线激活
+
+#define MERR_ASF_SEARCH_BASE							0x25000							//搜索接口错误码类型
+#define MERR_ASF_SEARCH_EMPTY                           (MERR_ASF_SEARCH_BASE+1)        //人脸列表为空
+#define MERR_ASF_SEARCH_NO_EXIST                        (MERR_ASF_SEARCH_BASE+2)        //人脸不存在
+#define MERR_ASF_SEARCH_FEATURE_SIZE_MISMATCH           (MERR_ASF_SEARCH_BASE+3)        //特征值长度不匹配
+#define MERR_ASF_SEARCH_LOW_CONFIDENCE                  (MERR_ASF_SEARCH_BASE+4)        //相似度异常
+
+#define MERR_ASF_RESERVED_BASE                          0x30000                         //预留字段错误码类型
+#define MERR_ASF_UNRESTRICTED_TIME_LIMIT_EXCEEDED       (MERR_ASF_RESERVED_BASE+1)      //非限制时段数量超出(限制时段：周一到周五 9：00-14：00)
 
 
 #endif

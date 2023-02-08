@@ -80,14 +80,20 @@ typedef struct __tag_point
 	MInt32 y; 
 } MPOINT, *PMPOINT;
 
+typedef struct __tag_pointf
+{
+	MFloat x;
+	MFloat y;
+} MPOINTF, *PMPOINTF;
+
 
 #define MNull		0
 #define MFalse		0
 #define MTrue		1
 
-//#ifndef MAX_PATH
-//#define MAX_PATH	256
-//#endif
+#ifndef MAX_PATH
+#define MAX_PATH	256
+#endif
 
 #ifdef M_WIDE_CHAR
 #define MTChar MWChar

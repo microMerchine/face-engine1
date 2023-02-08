@@ -570,11 +570,11 @@ func (engine *FaceEngine) GetFace3DAngle() (Face3DAngle, error) {
 	}
 	num := int32(asfFace3DAngle.num)
 	return Face3DAngle{
-		Roll:   (*[10]float32)(unsafe.Pointer(asfFace3DAngle.roll))[:num:num],
-		Yaw:    (*[10]float32)(unsafe.Pointer(asfFace3DAngle.yaw))[:num:num],
-		Pitch:  (*[10]float32)(unsafe.Pointer(asfFace3DAngle.pitch))[:num:num],
-		Status: (*[10]int32)(unsafe.Pointer(asfFace3DAngle.status))[:num:num],
-		Num:    int32(asfFace3DAngle.num),
+		Roll:  (*[10]float32)(unsafe.Pointer(asfFace3DAngle.roll))[:num:num],
+		Yaw:   (*[10]float32)(unsafe.Pointer(asfFace3DAngle.yaw))[:num:num],
+		Pitch: (*[10]float32)(unsafe.Pointer(asfFace3DAngle.pitch))[:num:num],
+		//Status: (*[10]int32)(unsafe.Pointer(asfFace3DAngle.status))[:num:num],
+		Num: int32(asfFace3DAngle.num),
 	}, nil
 }
 

@@ -220,7 +220,7 @@ extern "C" {
 		MInt32				format,								// [in] 颜色空间格式
 		MUInt8*				imgData,							// [in] 图片数据
 		LPASF_MultiFaceInfo	detectedFaces,						// [out]检测到的人脸信息 
-		ASF_DetectModel		detectModel = ASF_DETECT_MODEL_RGB	// [in] 预留字段，当前版本使用默认参数即可
+		ASF_DetectModel		detectModel	                        // [in] 预留字段，当前版本使用默认参数即可
 		);
 
 	/******************************************************
@@ -231,7 +231,7 @@ extern "C" {
 		MHandle				hEngine,							// [in] 引擎handle
 		LPASF_ImageData		imgData,							// [in] 图片数据
 		LPASF_MultiFaceInfo	detectedFaces,						// [out] 检测到的人脸信息
-		ASF_DetectModel		detectModel = ASF_DETECT_MODEL_RGB	// [in]	预留字段，当前版本使用默认参数即可
+		ASF_DetectModel		detectModel                     	// [in]	预留字段，当前版本使用默认参数即可
 		);
 
 	/******************************************************
@@ -270,7 +270,7 @@ extern "C" {
 		LPASF_SingleFaceInfo	faceInfo,							// [in] 人脸位置信息 
 		MInt32					isMask,								// [in] 仅支持传入1、0、-1，戴口罩 1，否则认为未戴口罩
 		MFloat*					confidenceLevel,					// [out] 图像质量检测结果
-		ASF_DetectModel			detectModel = ASF_DETECT_MODEL_RGB	// [in]	预留字段，当前版本使用默认参数即可
+		ASF_DetectModel			detectModel                      	// [in]	预留字段，当前版本使用默认参数即可
 		);
 
 	/******************************************************
@@ -283,7 +283,7 @@ extern "C" {
 		LPASF_SingleFaceInfo	faceInfo,							// [in] 人脸位置信息 
 		MInt32					isMask,                             // [in] 仅支持传入1、0、-1，戴口罩 1，否则认为未戴口罩
 		MFloat*              	confidenceLevel,					// [out] 图像质量检测结果
-		ASF_DetectModel			detectModel = ASF_DETECT_MODEL_RGB	// [in]	预留字段，当前版本使用默认参数即可
+		ASF_DetectModel			detectModel                     	// [in]	预留字段，当前版本使用默认参数即可
 		);
 
 	/************************************************************************
@@ -385,7 +385,7 @@ extern "C" {
 		LPASF_FaceFeature		feature1,						// [in] 待比较人脸特征1
 		LPASF_FaceFeature		feature2,						// [in] 待比较人脸特征2
 		MFloat*					confidenceLevel,				// [out] 比较结果，置信度数值
-		ASF_CompareModel		compareModel = ASF_LIFE_PHOTO	// [in] ASF_LIFE_PHOTO：用于生活照之间的特征比对
+		ASF_CompareModel		compareModel                	// [in] ASF_LIFE_PHOTO：用于生活照之间的特征比对
 																//		ASF_ID_PHOTO：用于证件照或证件照和生活照之间的特征比对
 		);
 
@@ -397,7 +397,7 @@ extern "C" {
             LPASF_FaceFeature    	feature,	                    // [in] 　待比较人脸特征
             MFloat*                 confidenceLevel,                // [out]　比较结果，最大置信度数值
             LPASF_FaceFeatureInfo   featureInfo,                    // [out]  最大置信度人脸信息
-            ASF_CompareModel		compareModel = ASF_LIFE_PHOTO   // [in]   搜索模式
+            ASF_CompareModel		compareModel                    // [in]   搜索模式
     );
 
     /************************************************************************

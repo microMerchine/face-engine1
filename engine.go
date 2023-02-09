@@ -345,6 +345,17 @@ func (engine *FaceEngine) DetectFacesEx(imageData ImageData) (faceInfo MultiFace
 	if asfFaceInfo.faceDataInfoList != nil {
 		faceInfo.FaceDataInfoList = (*[10]C.ASF_FaceDataInfo)(unsafe.Pointer(asfFaceInfo.faceDataInfoList))[:faceNum:faceNum]
 	}
+
+	if asfFaceInfo.face3DAngleInfo.roll != nil {
+		faceInfo.Face3DAngle.Roll = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.roll))[:faceNum:faceNum]
+	}
+	if asfFaceInfo.face3DAngleInfo.yaw != nil {
+		faceInfo.Face3DAngle.Yaw = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.yaw))[:faceNum:faceNum]
+	}
+	if asfFaceInfo.face3DAngleInfo.pitch != nil {
+		faceInfo.Face3DAngle.Pitch = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.pitch))[:faceNum:faceNum]
+	}
+
 	faceInfo.native = asfFaceInfo
 	return
 }

@@ -11,7 +11,7 @@ var imageInfo = util.GetResizedImageInfo("./mask.jpg")
 
 func main() {
 	// 激活SDK
-	if err := OnlineActivation("YourAppID", "YourSDKKey", "YourActiveCode"); err != nil {
+	if err := OnlineActivation("2eCYi7C1SiTMWCDWXZzt27CVbMTQcUov9452yhphUisF", "9gc3DQBq93eiSxGUvXFgTLmvv8Xp1ZAKua7RVKZ8i1jo", "82G1-11GA-B13Z-B2Z5"); err != nil {
 		fmt.Printf("%#v\n", err)
 		return
 	}

@@ -113,18 +113,34 @@ extern "C" {
 		ASF_FaceDataInfo faceDataInfo;		// ����������Ϣ
 	} ASF_SingleFaceInfo, *LPASF_SingleFaceInfo;
 
-	//��������Ϣ
-	typedef struct MultiFaceInfo {
-		MRECT* 		faceRect;			        // ��������Ϣ
-		MInt32*		faceOrient;			        // ����ͼ��ĽǶȣ����Բο� ArcFaceCompare_OrientCode .
-		MInt32		faceNum;			        // ��⵽����������
-		MInt32*     faceID;				        // face ID��IMAGEģʽ�²�����FaceID
-		MFloat*		wearGlasses;		        // ���۾����Ŷ�[0-1],�Ƽ���ֵ0.5
-		MInt32*		leftEyeClosed;	            // ����״̬ 0 δ���ۣ�1 ����
-		MInt32*		rightEyeClosed;	            // ����״̬ 0 δ���ۣ�1 ����
-		MInt32*	    faceShelter;	            // "1" ��ʾ �ڵ�, "0" ��ʾ  δ�ڵ�, "-1" ��ʾ��ȷ��
-		LPASF_FaceDataInfo faceDataInfoList;	// ����������Ϣ
-	}ASF_MultiFaceInfo, *LPASF_MultiFaceInfo;
+	//3D角度信息
+	typedef struct
+	{
+		MFloat* roll;
+		MFloat* yaw;
+		MFloat* pitch;
+	}ASF_Face3DAngleInfo, *LPASF_Face3DAngleInfo;
+
+	//人脸属性信息
+	typedef struct{
+		MInt32*				wearGlasses;        // 戴眼镜状态, 0 未戴眼镜；1 戴眼镜；2 墨镜
+		MInt32*				leftEyeOpen;        // 左眼状态 0 闭眼；1 睁眼
+		MInt32*				rightEyeOpen;       // 右眼状态 0 闭眼；1 睁眼
+		MInt32*				mouthClose;         // 张嘴状态 0 张嘴；1 合嘴
+	} ASF_FaceAttributeInfo, *LPASF_FaceAttributeInfo;
+
+    //多人脸框信息
+    typedef struct MultiFaceInfo {
+       MInt32                  faceNum;                // 检测到的人脸个数
+       MRECT*                  faceRect;               // 人脸框信息
+       MInt32*                 faceOrient;             // 输入图像的角度，可以参考 ArcFace_OrientCode .
+       MInt32*                 faceID;                 // face ID
+       LPASF_FaceDataInfo      faceDataInfoList;      // 人脸检测信息
+       MInt32*                 faceIsWithinBoundary;   // 人脸是否在边界内 0 人脸溢出；1 人脸在图像边界内
+       MRECT*                  foreheadRect;           // 人脸额头区域
+       ASF_FaceAttributeInfo   faceAttributeInfo;      // 人脸属性信息
+       ASF_Face3DAngleInfo     face3DAngleInfo;        // 人脸3D角度
+    } ASF_MultiFaceInfo, *LPASF_MultiFaceInfo;
 
 	// �����ļ���Ϣ
 	typedef struct ActiveFileInfo {

@@ -21,15 +21,22 @@ type FaceEngine struct {
 
 // MultiFaceInfo 多人脸信息结构体
 type MultiFaceInfo struct {
-	FaceRect         []Rect               // 人脸框信息
-	FaceOrient       []int32              // 输入图像的角度
-	FaceNum          int32                // 检测到的人脸个数
-	FaceID           []int32              // face ID，IMAGE模式下不返回FaceID
-	WearGlasses      float32              // 带眼镜置信度[0-1]，推荐阈值0.5
-	LeftEyeClosed    int32                // 左眼状态 0 未闭眼 1 闭眼
-	RightEyeClosed   int32                // 右眼状态 0 未闭眼 1 闭眼
+	FaceRect         []Rect  // 人脸框信息
+	FaceOrient       []int32 // 输入图像的角度
+	FaceNum          int32   // 检测到的人脸个数
+	FaceID           []int32 // face ID，IMAGE模式下不返回FaceID
+	WearGlasses      float32 // 带眼镜置信度[0-1]，推荐阈值0.5
+	LeftEyeClosed    int32   // 左眼状态 0 未闭眼 1 闭眼
+	RightEyeClosed   int32   // 右眼状态 0 未闭眼 1 闭眼
+	Face3DAngle      Face3DAngleInfo
 	FaceDataInfoList []C.ASF_FaceDataInfo // 多张人脸信息
 	native           *C.ASF_MultiFaceInfo
+}
+
+type Face3DAngleInfo struct {
+	Roll  []float32
+	Yaw   []float32
+	Pitch []float32
 }
 
 // Rect 人脸坐标结构体
@@ -302,6 +309,17 @@ func (engine *FaceEngine) DetectFaces(
 	if asfFaceInfo.faceDataInfoList != nil {
 		faceInfo.FaceDataInfoList = (*[10]C.ASF_FaceDataInfo)(unsafe.Pointer(asfFaceInfo.faceDataInfoList))[:faceNum:faceNum]
 	}
+
+	if asfFaceInfo.face3DAngleInfo.roll != nil {
+		faceInfo.Face3DAngle.Roll = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.roll))[:faceNum:faceNum]
+	}
+	if asfFaceInfo.face3DAngleInfo.yaw != nil {
+		faceInfo.Face3DAngle.Yaw = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.yaw))[:faceNum:faceNum]
+	}
+	if asfFaceInfo.face3DAngleInfo.pitch != nil {
+		faceInfo.Face3DAngle.Pitch = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.pitch))[:faceNum:faceNum]
+	}
+
 	faceInfo.native = asfFaceInfo
 	return
 }

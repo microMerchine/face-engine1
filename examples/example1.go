@@ -16,9 +16,9 @@ func main() {
 		return
 	}
 	// 初始化引擎
-	engine, err := NewFaceEngine(DetectModeImage,
+	engine, err := NewFaceEngine(DetectModeVideo,
 		OrientPriority0,
-		10, // 4.0最大支持10个人脸
+		50, // 4.0最大支持10个人脸
 		EnableFaceDetect|EnableFaceRecognition|EnableLiveness|EnableIRLiveness|EnableAge|EnableGender|EnableMaskDetect)
 	if err != nil {
 		fmt.Printf("%#v\n", err)
@@ -34,6 +34,10 @@ func main() {
 	if err != nil {
 		fmt.Printf("%#v\n", err)
 		return
+	}
+	if info.FaceNum > 0 {
+		fmt.Printf("3D FaceId:%d pitch:%f yaw:%f rall:%f \n", info.FaceID[0], info.Face3DAngle.Pitch[0], info.Face3DAngle.Yaw[0], info.Face3DAngle.Roll[0])
+		fmt.Printf("RECT FaceId:%d Top:%d Right:%d  \n", info.FaceID[0], info.ForeheadRect[0].Top, info.ForeheadRect[0].Right)
 	}
 	// 处理人脸数据
 	if err = engine.Process(imageInfo.Width, imageInfo.Height, ColorFormatBGR24, imageInfo.DataUInt8, info, EnableAge|EnableGender|EnableLiveness|EnableMaskDetect); err != nil {

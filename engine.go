@@ -204,7 +204,7 @@ const (
 func NewFaceEngine(
 	detectMode C.ASF_DetectMode, // 检测模式
 	orientPriority C.ASF_OrientPriority, // 检测角度
-	maxFaceNum C.MInt32, // 最大人脸数[1-10]
+	maxFaceNum C.MInt32, // 最大人脸数[1-50]
 	combinedMask C.MInt32, // 检测选项
 ) (*FaceEngine, error) {
 	engine, err := &FaceEngine{}, error(nil)
@@ -299,25 +299,25 @@ func (engine *FaceEngine) DetectFaces(
 	faceNum := int32(asfFaceInfo.faceNum)
 	faceInfo.FaceNum = faceNum
 	if faceNum > 0 {
-		faceInfo.FaceRect = (*[10]Rect)(unsafe.Pointer(asfFaceInfo.faceRect))[:faceNum:faceNum]
-		faceInfo.ForeheadRect = (*[10]Rect)(unsafe.Pointer(asfFaceInfo.foreheadRect))[:faceNum:faceNum]
-		faceInfo.FaceOrient = (*[10]int32)(unsafe.Pointer(asfFaceInfo.faceOrient))[:faceNum:faceNum]
+		faceInfo.FaceRect = (*[50]Rect)(unsafe.Pointer(asfFaceInfo.faceRect))[:faceNum:faceNum]
+		faceInfo.ForeheadRect = (*[50]Rect)(unsafe.Pointer(asfFaceInfo.foreheadRect))[:faceNum:faceNum]
+		faceInfo.FaceOrient = (*[50]int32)(unsafe.Pointer(asfFaceInfo.faceOrient))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.faceID != nil {
-		faceInfo.FaceID = (*[10]int32)(unsafe.Pointer(asfFaceInfo.faceID))[:faceNum:faceNum]
+		faceInfo.FaceID = (*[50]int32)(unsafe.Pointer(asfFaceInfo.faceID))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.faceDataInfoList != nil {
-		faceInfo.FaceDataInfoList = (*[10]C.ASF_FaceDataInfo)(unsafe.Pointer(asfFaceInfo.faceDataInfoList))[:faceNum:faceNum]
+		faceInfo.FaceDataInfoList = (*[50]C.ASF_FaceDataInfo)(unsafe.Pointer(asfFaceInfo.faceDataInfoList))[:faceNum:faceNum]
 	}
 
 	if asfFaceInfo.face3DAngleInfo.roll != nil {
-		faceInfo.Face3DAngle.Roll = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.roll))[:faceNum:faceNum]
+		faceInfo.Face3DAngle.Roll = (*[50]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.roll))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.face3DAngleInfo.yaw != nil {
-		faceInfo.Face3DAngle.Yaw = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.yaw))[:faceNum:faceNum]
+		faceInfo.Face3DAngle.Yaw = (*[50]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.yaw))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.face3DAngleInfo.pitch != nil {
-		faceInfo.Face3DAngle.Pitch = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.pitch))[:faceNum:faceNum]
+		faceInfo.Face3DAngle.Pitch = (*[50]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.pitch))[:faceNum:faceNum]
 	}
 
 	faceInfo.native = asfFaceInfo
@@ -336,25 +336,25 @@ func (engine *FaceEngine) DetectFacesEx(imageData ImageData) (faceInfo MultiFace
 	faceNum := int32(asfFaceInfo.faceNum)
 	faceInfo.FaceNum = faceNum
 	if faceNum > 0 {
-		faceInfo.FaceRect = (*[10]Rect)(unsafe.Pointer(asfFaceInfo.faceRect))[:faceNum:faceNum]
-		faceInfo.ForeheadRect = (*[10]Rect)(unsafe.Pointer(asfFaceInfo.foreheadRect))[:faceNum:faceNum]
-		faceInfo.FaceOrient = (*[10]int32)(unsafe.Pointer(asfFaceInfo.faceOrient))[:faceNum:faceNum]
+		faceInfo.FaceRect = (*[50]Rect)(unsafe.Pointer(asfFaceInfo.faceRect))[:faceNum:faceNum]
+		faceInfo.ForeheadRect = (*[50]Rect)(unsafe.Pointer(asfFaceInfo.foreheadRect))[:faceNum:faceNum]
+		faceInfo.FaceOrient = (*[50]int32)(unsafe.Pointer(asfFaceInfo.faceOrient))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.faceID != nil {
-		faceInfo.FaceID = (*[10]int32)(unsafe.Pointer(asfFaceInfo.faceID))[:faceNum:faceNum]
+		faceInfo.FaceID = (*[50]int32)(unsafe.Pointer(asfFaceInfo.faceID))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.faceDataInfoList != nil {
-		faceInfo.FaceDataInfoList = (*[10]C.ASF_FaceDataInfo)(unsafe.Pointer(asfFaceInfo.faceDataInfoList))[:faceNum:faceNum]
+		faceInfo.FaceDataInfoList = (*[50]C.ASF_FaceDataInfo)(unsafe.Pointer(asfFaceInfo.faceDataInfoList))[:faceNum:faceNum]
 	}
 
 	if asfFaceInfo.face3DAngleInfo.roll != nil {
-		faceInfo.Face3DAngle.Roll = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.roll))[:faceNum:faceNum]
+		faceInfo.Face3DAngle.Roll = (*[50]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.roll))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.face3DAngleInfo.yaw != nil {
-		faceInfo.Face3DAngle.Yaw = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.yaw))[:faceNum:faceNum]
+		faceInfo.Face3DAngle.Yaw = (*[50]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.yaw))[:faceNum:faceNum]
 	}
 	if asfFaceInfo.face3DAngleInfo.pitch != nil {
-		faceInfo.Face3DAngle.Pitch = (*[10]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.pitch))[:faceNum:faceNum]
+		faceInfo.Face3DAngle.Pitch = (*[50]float32)(unsafe.Pointer(asfFaceInfo.face3DAngleInfo.pitch))[:faceNum:faceNum]
 	}
 
 	faceInfo.native = asfFaceInfo
@@ -566,7 +566,7 @@ func (engine *FaceEngine) GetAge() (AgeInfo, error) {
 	}
 	num := int32(asfAgeInfo.num)
 	return AgeInfo{
-		AgeArray: (*[10]int32)(unsafe.Pointer(asfAgeInfo.ageArray))[:num:num],
+		AgeArray: (*[50]int32)(unsafe.Pointer(asfAgeInfo.ageArray))[:num:num],
 		Num:      num,
 	}, nil
 }
@@ -580,7 +580,7 @@ func (engine *FaceEngine) GetGender() (GenderInfo, error) {
 	}
 	num := int32(asfGenderInfo.num)
 	return GenderInfo{
-		GenderArray: (*[10]int32)(unsafe.Pointer(asfGenderInfo.genderArray))[:num:num],
+		GenderArray: (*[50]int32)(unsafe.Pointer(asfGenderInfo.genderArray))[:num:num],
 		Num:         num,
 	}, nil
 }
@@ -594,7 +594,7 @@ func (engine *FaceEngine) GetLivenessScore() (LivenessInfo, error) {
 	}
 	num := int32(asfLivenessInfo.num)
 	return LivenessInfo{
-		IsLive: (*[10]int32)(unsafe.Pointer(asfLivenessInfo.isLive))[:num:num],
+		IsLive: (*[50]int32)(unsafe.Pointer(asfLivenessInfo.isLive))[:num:num],
 		Num:    num,
 	}, nil
 }
@@ -608,7 +608,7 @@ func (engine *FaceEngine) GetLivenessScoreIR() (LivenessInfo, error) {
 	}
 	num := int32(asfLivenessInfo.num)
 	return LivenessInfo{
-		IsLive: (*[10]int32)(unsafe.Pointer(asfLivenessInfo.isLive))[:num:num],
+		IsLive: (*[50]int32)(unsafe.Pointer(asfLivenessInfo.isLive))[:num:num],
 		Num:    num,
 	}, nil
 }
@@ -622,7 +622,7 @@ func (engine *FaceEngine) GetMask() (maskInfo MaskInfo, err error) {
 	}
 	num := int32(asfMaskInfo.num)
 	return MaskInfo{
-		MaskArray: (*[10]int32)(unsafe.Pointer(asfMaskInfo.maskArray))[:num:num],
+		MaskArray: (*[50]int32)(unsafe.Pointer(asfMaskInfo.maskArray))[:num:num],
 		Num:       num,
 	}, nil
 }

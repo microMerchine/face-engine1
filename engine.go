@@ -2,7 +2,7 @@ package faceengine
 
 /*
 #cgo CFLAGS		: -I./include
-#cgo LDFLAGS	: -larcsoft_face_engine
+#cgo LDFLAGS	: -lrxx
 #include <stdlib.h>
 #include "merror.h"
 #include "asvloffscreen.h"
@@ -210,7 +210,7 @@ func NewFaceEngine(
 	engine, err := &FaceEngine{}, error(nil)
 	r := C.ASFInitEngine(detectMode, orientPriority, maxFaceNum, combinedMask, &engine.handle)
 	if r != C.MOK {
-		err = newError(int(r), "初始化引擎失败")
+		err = newError(int(r), "engine fail")
 	}
 	return engine, err
 }
@@ -220,7 +220,7 @@ func GetActiveFileInfo() (ActiveFileInfo, error) {
 	asfActiveFileInfo := &C.ASF_ActiveFileInfo{}
 	r := C.ASFGetActiveFileInfo(asfActiveFileInfo)
 	if r != C.MOK {
-		return ActiveFileInfo{}, newError(int(r), "获取激活文件信息失败")
+		return ActiveFileInfo{}, newError(int(r), "activate file fail")
 	}
 	info := ActiveFileInfo{
 		StartTime:   C.GoString(asfActiveFileInfo.startTime),
@@ -247,7 +247,7 @@ func OnlineActivation(appID, sdkKey, activeKey string) (err error) {
 	}()
 	r := C.ASFOnlineActivation(id, sk, ak)
 	if r != C.MOK && r != C.MERR_ASF_ALREADY_ACTIVATED {
-		err = newError(int(r), "激活SDK失败")
+		err = newError(int(r), "activate fail")
 	}
 	return
 }
@@ -258,7 +258,7 @@ func OfflineActivation(filePath string) (err error) {
 	defer C.free(unsafe.Pointer(cFilePath))
 	r := C.ASFOfflineActivation(cFilePath)
 	if r != C.MOK {
-		err = newError(int(r), "离线激活失败")
+		err = newError(int(r), "offline activate fail")
 	}
 	return
 }
@@ -269,7 +269,7 @@ func GetActiveDeviceInfo() ([]byte, error) {
 	defer C.free(unsafe.Pointer(deviceInfo))
 	r := C.ASFGetActiveDeviceInfo((*C.MPChar)(unsafe.Pointer(&deviceInfo)))
 	if r != C.MOK {
-		return nil, newError(int(r), "采集当前设备信息失败")
+		return nil, newError(int(r), "get device info fail")
 	}
 	str := C.GoString(deviceInfo)
 	b := make([]byte, len(str))
@@ -294,7 +294,7 @@ func (engine *FaceEngine) DetectFaces(
 		C.ASF_DETECT_MODEL_RGB,
 	)
 	if r != C.MOK {
-		return faceInfo, newError(int(r), "人脸检测失败")
+		return faceInfo, newError(int(r), "byte fail")
 	}
 	faceNum := int32(asfFaceInfo.faceNum)
 	faceInfo.FaceNum = faceNum
@@ -331,7 +331,7 @@ func (engine *FaceEngine) DetectFacesEx(imageData ImageData) (faceInfo MultiFace
 	asfFaceInfo := &C.ASF_MultiFaceInfo{}
 	r := C.ASFDetectFacesEx(engine.handle, imageDataToASVLOFFSCREEN(imageData), asfFaceInfo, C.ASF_DETECT_MODEL_RGB)
 	if r != C.MOK {
-		return faceInfo, newError(int(r), "人脸检测失败")
+		return faceInfo, newError(int(r), "byte fail")
 	}
 	faceNum := int32(asfFaceInfo.faceNum)
 	faceInfo.FaceNum = faceNum
@@ -379,7 +379,7 @@ func (engine *FaceEngine) Process(
 		detectedFaces.native,
 		combinedMask)
 	if r != C.MOK {
-		return newError(int(r), "检测人脸信息失败")
+		return newError(int(r), "process fail")
 	}
 	return nil
 }
@@ -390,7 +390,7 @@ func (engine *FaceEngine) Process(
 func (engine *FaceEngine) ProcessEx(imageData ImageData, faceInfo MultiFaceInfo, combinedMask C.MInt32) error {
 	r := C.ASFProcessEx(engine.handle, imageDataToASVLOFFSCREEN(imageData), faceInfo.native, combinedMask)
 	if r != C.MOK {
-		return newError(int(r), "检测人脸信息失败")
+		return newError(int(r), "process fail")
 	}
 	return nil
 }
@@ -412,7 +412,7 @@ func (engine *FaceEngine) ProcessIR(
 		detectedFaces.native,
 		combinedMask)
 	if r != C.MOK {
-		return newError(int(r), "检测人脸IR活体信息失败")
+		return newError(int(r), "IR fail")
 	}
 	return nil
 }
@@ -427,7 +427,7 @@ func (engine *FaceEngine) ProcessExIR(
 ) (err error) {
 	r := C.ASFProcessEx_IR(engine.handle, imageDataToASVLOFFSCREEN(imageData), faceInfo.native, combinedMask)
 	if r != C.MOK {
-		return newError(int(r), "检测人脸IR活体信息失败")
+		return newError(int(r), "IR fail")
 	}
 	return nil
 }
@@ -525,7 +525,7 @@ func (engine *FaceEngine) FaceFeatureExtractEx(
 		faceInfo.DataInfo}
 	r := C.ASFFaceFeatureExtractEx(engine.handle, imageDataToASVLOFFSCREEN(imageData), asfFaceInfo, C.ASF_RegisterOrNot(registerOrNot), C.MInt32(mask), asfFaceFeature)
 	if r != C.MOK {
-		return FaceFeature{}, newError(int(r), "提取人脸特征失败")
+		return FaceFeature{}, newError(int(r), "feature fail")
 	}
 	length := int32(asfFaceFeature.featureSize)
 	feature.FeatureSize = length
@@ -552,7 +552,7 @@ func (engine *FaceEngine) FaceFeatureCompare(feature1, feature2 FaceFeature) (co
 		C.ASF_DETECT_MODEL_RGB,
 	)
 	if r != C.MOK {
-		err = newError(int(r), "人脸特征比对失败!")
+		err = newError(int(r), "compare fail")
 	}
 	return
 }
@@ -562,7 +562,7 @@ func (engine *FaceEngine) GetAge() (AgeInfo, error) {
 	asfAgeInfo := &C.ASF_AgeInfo{}
 	r := C.ASFGetAge((C.MHandle)(engine.handle), asfAgeInfo)
 	if r != C.MOK {
-		return AgeInfo{}, newError(int(r), "获取年龄信息失败")
+		return AgeInfo{}, newError(int(r), "age fail")
 	}
 	num := int32(asfAgeInfo.num)
 	return AgeInfo{
@@ -576,7 +576,7 @@ func (engine *FaceEngine) GetGender() (GenderInfo, error) {
 	asfGenderInfo := &C.ASF_GenderInfo{}
 	r := C.ASFGetGender((C.MHandle)(engine.handle), asfGenderInfo)
 	if r != C.MOK {
-		return GenderInfo{}, newError(int(r), "获取性别信息失败")
+		return GenderInfo{}, newError(int(r), "gender fail")
 	}
 	num := int32(asfGenderInfo.num)
 	return GenderInfo{
@@ -590,7 +590,7 @@ func (engine *FaceEngine) GetLivenessScore() (LivenessInfo, error) {
 	asfLivenessInfo := &C.ASF_LivenessInfo{}
 	r := C.ASFGetLivenessScore((C.MHandle)(engine.handle), asfLivenessInfo)
 	if r != C.MOK {
-		return LivenessInfo{}, newError(int(r), "获取活体信息失败")
+		return LivenessInfo{}, newError(int(r), "liveness fail")
 	}
 	num := int32(asfLivenessInfo.num)
 	return LivenessInfo{
@@ -604,7 +604,7 @@ func (engine *FaceEngine) GetLivenessScoreIR() (LivenessInfo, error) {
 	asfLivenessInfo := &C.ASF_LivenessInfo{}
 	r := C.ASFGetLivenessScore_IR((C.MHandle)(engine.handle), asfLivenessInfo)
 	if r != C.MOK {
-		return LivenessInfo{}, newError(int(r), "获取活体信息失败")
+		return LivenessInfo{}, newError(int(r), "liveness fail")
 	}
 	num := int32(asfLivenessInfo.num)
 	return LivenessInfo{
@@ -618,7 +618,7 @@ func (engine *FaceEngine) GetMask() (maskInfo MaskInfo, err error) {
 	asfMaskInfo := &C.ASF_MaskInfo{}
 	r := C.ASFGetMask(engine.handle, (*C.ASF_MaskInfo)(unsafe.Pointer(asfMaskInfo)))
 	if r != C.MOK {
-		return maskInfo, newError(int(r), "获取口罩信息失败")
+		return maskInfo, newError(int(r), "mask fail")
 	}
 	num := int32(asfMaskInfo.num)
 	return MaskInfo{
@@ -637,7 +637,7 @@ func (engine *FaceEngine) UpdateFaceData(
 ) (err error) {
 	r := C.ASFUpdateFaceData(engine.handle, C.MInt32(width), C.MInt32(height), format, (*C.MUInt8)(unsafe.Pointer(&imgData[0])), faceInfo.native)
 	if r != C.MOK {
-		err = newError(int(r), "更新人脸数据失败")
+		err = newError(int(r), "up fail")
 	}
 	return
 }
@@ -671,7 +671,7 @@ func (engine *FaceEngine) ImageQualityDetect(
 		C.ASF_DETECT_MODEL_RGB,
 	)
 	if r != C.MOK {
-		err = newError(int(r), "单人脸图片质量检测失败")
+		err = newError(int(r), "byte fail")
 	}
 	return confidenceLevel, err
 }
@@ -680,7 +680,7 @@ func (engine *FaceEngine) ImageQualityDetect(
 func (engine *FaceEngine) Destroy() (err error) {
 	r := C.ASFUninitEngine(engine.handle)
 	if r != C.MOK {
-		err = newError(int(r), "销毁引擎失败")
+		err = newError(int(r), "destroy fail")
 	}
 	return
 }

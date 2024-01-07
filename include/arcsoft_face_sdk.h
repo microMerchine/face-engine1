@@ -25,40 +25,38 @@
 extern "C" {
 #endif
 
-#define ASF_NONE				0x00000000	//������
-#define ASF_FACE_DETECT			0x00000001	//�˴�detect������tracking����detection��������֮һ�������ѡ����detect mode ȷ��
-#define ASF_FACERECOGNITION		0x00000004	//��������
-#define ASF_AGE					0x00000008	//����
-#define ASF_GENDER				0x00000010	//�Ա�
-#define ASF_FACE3DANGLE			0x00000020	//3D�Ƕ�
-#define ASF_FACELANDMARK		0x00000040	//��ͷ������
-#define ASF_LIVENESS			0x00000080	//RGB����
-#define ASF_IMAGEQUALITY		0x00000200	//ͼ���������
-#define ASF_IR_LIVENESS			0x00000400	//IR����
-#define ASF_FACESHELTER			0x00000800  //�����ڵ�
-#define ASF_MASKDETECT			0x00001000	//���ּ��
-#define ASF_UPDATE_FACEDATA		0x00002000	//������Ϣ
+#define ASF_NONE				0x00000000	//无属性
+#define ASF_FACE_DETECT			0x00000001	//此处detect可以是tracking或者detection两个引擎之一，具体的选择由detect mode 确定
+#define ASF_FACERECOGNITION		0x00000004	//人脸特征
+#define ASF_AGE					0x00000008	//年龄
+#define ASF_GENDER				0x00000010	//性别
+#define ASF_LIVENESS			0x00000080	//RGB活体
+#define ASF_IMAGEQUALITY		0x00000200	//图像质量检测
+#define ASF_IR_LIVENESS			0x00000400	//IR活体
+#define ASF_MASKDETECT			0x00001000	//口罩检测
+#define ASF_UPDATE_FACEDATA	    0x00002000	//更新人脸数据
 
 
 #define ASF_MAX_DETECTFACENUM   50          //该版本最大支持同时检测50张人脸
 
-	//���ģʽ
-	typedef enum __tag_ASF_DetectMode{
-		ASF_DETECT_MODE_VIDEO = 0x00000000,		//Videoģʽ��һ�����ڶ�֡�������
-		ASF_DETECT_MODE_IMAGE = 0xFFFFFFFF		//Imageģʽ��һ�����ھ�̬ͼ�ĵ��μ��
-	} ASF_DetectMode;
+	//检测模式
+	enum ASF_DetectMode{
+		ASF_DETECT_MODE_VIDEO = 0x00000000,		//Video模式，一般用于多帧连续检测
+		ASF_DETECT_MODE_IMAGE = 0xFFFFFFFF		//Image模式，一般用于静态图的单次检测
+	};
 
-	//���ʱ�������Ƕȵ����ȼ������ĵ��г�ʼ���ӿ�����ͼʾ˵������ο�
-	typedef enum __tag_ASF_OrientPriority {
-		ASF_OP_0_ONLY = 0x1,		// ����Ԥ����������
-		ASF_OP_90_ONLY = 0x2,		// ����0����ʱ����ת90��ķ���
-		ASF_OP_270_ONLY = 0x3,		// ����0����ʱ����ת270��ķ���
-		ASF_OP_180_ONLY = 0x4,		// ����0����ת180��ķ�����ʱ�롢˳ʱ��Ч��һ����
-		ASF_OP_ALL_OUT = 0x5		// ȫ�Ƕ�
-	} ASF_OrientPriority;
 
-	//orientation �Ƕȣ���ʱ�뷽��
-	typedef enum __tag_ASF_OrientCode {
+	//检测时候人脸角度的优先级，在文档中初始化接口中有图示说明，请参考
+	enum ASF_OrientPriority {
+		ASF_OP_0_ONLY = 0x1,		// 常规预览下正方向
+		ASF_OP_90_ONLY = 0x2,		// 基于0°逆时针旋转90°的方向
+		ASF_OP_270_ONLY = 0x3,		// 基于0°逆时针旋转270°的方向
+		ASF_OP_180_ONLY = 0x4,		// 基于0°旋转180°的方向（逆时针、顺时针效果一样）
+		ASF_OP_ALL_OUT = 0x5		// 全角度
+	};
+
+	//orientation 角度，逆时针方向
+	enum ASF_OrientCode {
 		ASF_OC_0 = 0x1,			// 0 degree
 		ASF_OC_90 = 0x2,		// 90 degree
 		ASF_OC_270 = 0x3,		// 270 degree
@@ -71,55 +69,34 @@ extern "C" {
 		ASF_OC_240 = 0xa,		// 240 degree
 		ASF_OC_300 = 0xb,		// 300 degree
 		ASF_OC_330 = 0xc		// 330 degree
-	} ASF_OrientCode;
+	};
 
-	//���ģ��
-	typedef enum __tag_ASF_DetectModel {
-		ASF_DETECT_MODEL_RGB = 0x1	//RGBͼ����ģ��
-		//Ԥ����չ�������ģ��
-	} ASF_DetectModel;
+	//检测模型
+	enum ASF_DetectModel {
+		ASF_DETECT_MODEL_RGB = 0x1	//RGB图像检测模型
+		//预留扩展其他检测模型
+	};
 
-	//�����ȶԿ�ѡ��ģ��
-	typedef enum __tag_ASF_CompareModel{
-		ASF_LIFE_PHOTO = 0x1,	//����������֮��������ȶԣ��Ƽ���ֵ0.80
-		ASF_ID_PHOTO = 0x2		//����֤���ջ���������֤����֮��������ȶԣ��Ƽ���ֵ0.82
-	} ASF_CompareModel;
+	//人脸比对可选的模型
+	enum ASF_CompareModel{
+		ASF_LIFE_PHOTO = 0x1,	//用于生活照之间的特征比对，推荐阈值0.80
+		ASF_ID_PHOTO = 0x2		//用于证件照或生活照与证件照之间的特征比对，推荐阈值0.82
+	};
 
-	typedef enum __tag_ASF_RegisterOrNot{
-		ASF_RECOGNITION = 0x0,  //����ʶ��������������ȡ
-		ASF_REGISTER = 0x1      //����ע��������������ȡ
-	} ASF_RegisterOrNot;
+	enum ASF_RegisterOrNot{
+		ASF_RECOGNITION = 0x0,  //用于识别照人脸特征提取
+		ASF_REGISTER = 0x1      //用于注册照人脸特征提取
+	};
 
-	//�汾��Ϣ
+	//版本信息
 	typedef struct {
-		MPChar Version;				// �汾��
-		MPChar BuildDate;			// ��������
+		MPChar Version;				// 版本号
+		MPChar BuildDate;			// 构建日期
 		MPChar CopyRight;			// Copyright
 	}ASF_VERSION, *LPASF_VERSION;
 
-	//ͼ������
+	//图像数据
 	typedef LPASVLOFFSCREEN LPASF_ImageData;
-
-	//������Ϣ
-	typedef struct{
-		MPVoid		data;		// ������Ϣ
-		MInt32		dataSize;	// ������Ϣ����
-	} ASF_FaceDataInfo, *LPASF_FaceDataInfo;
-
-	//��������Ϣ
-	typedef struct SingleFaceInfo {
-		MRECT		faceRect;		        // ��������Ϣ
-		MInt32		faceOrient;		        // ����ͼ��ĽǶȣ����Բο� ArcFaceCompare_OrientCode
-		ASF_FaceDataInfo faceDataInfo;		// ����������Ϣ
-	} ASF_SingleFaceInfo, *LPASF_SingleFaceInfo;
-
-	//3D角度信息
-	typedef struct
-	{
-		MFloat* roll;
-		MFloat* yaw;
-		MFloat* pitch;
-	}ASF_Face3DAngleInfo, *LPASF_Face3DAngleInfo;
 
 	//人脸属性信息
 	typedef struct{
@@ -129,392 +106,448 @@ extern "C" {
 		MInt32*				mouthClose;         // 张嘴状态 0 张嘴；1 合嘴
 	} ASF_FaceAttributeInfo, *LPASF_FaceAttributeInfo;
 
-    //多人脸框信息
-    typedef struct MultiFaceInfo {
-       MInt32                  faceNum;                // 检测到的人脸个数
-       MRECT*                  faceRect;               // 人脸框信息
-       MInt32*                 faceOrient;             // 输入图像的角度，可以参考 ArcFace_OrientCode .
-       MInt32*                 faceID;                 // face ID
-       LPASF_FaceDataInfo      faceDataInfoList;      // 人脸检测信息
-       MInt32*                 faceIsWithinBoundary;   // 人脸是否在边界内 0 人脸溢出；1 人脸在图像边界内
-       MRECT*                  foreheadRect;           // 人脸额头区域
-       ASF_FaceAttributeInfo   faceAttributeInfo;      // 人脸属性信息
-       ASF_Face3DAngleInfo     face3DAngleInfo;        // 人脸3D角度
-    } ASF_MultiFaceInfo, *LPASF_MultiFaceInfo;
-
-	// �����ļ���Ϣ
-	typedef struct ActiveFileInfo {
-		MPChar startTime;		//��ʼʱ��
-		MPChar endTime;			//��ֹʱ��
-		MPChar activeKey;		//������
-		MPChar platform;		//ƽ̨
-		MPChar sdkType;			//sdk����
-		MPChar appId;			//APPID
-		MPChar sdkKey;			//SDKKEY
-		MPChar sdkVersion;		//SDK�汾��
-		MPChar fileVersion;		//�����ļ��汾��
-	}ASF_ActiveFileInfo, *LPASF_ActiveFileInfo;
-
-	/*******************************************************************************************
-	* ��ȡ�����ļ���Ϣ�ӿ�
-	*******************************************************************************************/
-	MRESULT ASFGetActiveFileInfo(
-		LPASF_ActiveFileInfo  activeFileInfo  // [out] �����ļ���Ϣ
-		);
-
-	/*******************************************************************************************
-	* ���߼���ӿ�
-	*******************************************************************************************/
-	MRESULT ASFOnlineActivation(
-		MPChar				AppId,			// [in]  APPID	��������
-		MPChar				SDKKey,			// [in]  SDKKEY	��������
-		MPChar				ActiveKey		// [in]  ActiveKey	��������
-		);
-
-	/*******************************************************************************************
-	* ��ȡ�豸��Ϣ�ӿ�
-	*******************************************************************************************/
-	MRESULT ASFGetActiveDeviceInfo(
-		MPChar*				deviceInfo		// [out] �ɼ����豸��Ϣ�����ڵ����������������߼������������Ȩ�ļ�
-		);
-
-	/*******************************************************************************************
-	* ���߼���ӿ�
-	*******************************************************************************************/
-	MRESULT ASFOfflineActivation(
-		MPChar				filePath		// [in]  �����ļ�·��(������Ȩ�ļ�)����Ҫ��дȨ��
-		);
-
-	/************************************************************************
-	* ��ʼ������
-	************************************************************************/
-	MRESULT ASFInitEngine(
-		ASF_DetectMode		detectMode,					// [in]	AF_DETECT_MODE_VIDEO ��Ƶģʽ������������ͷԤ������Ƶ�ļ�ʶ��
-														//		AF_DETECT_MODE_IMAGE ͼƬģʽ�������ھ�̬ͼƬ��ʶ��
-		ASF_OrientPriority	detectFaceOrientPriority,	// [in]	��������ĽǶ�����ֵ���ο� ArcFaceCompare_OrientPriority
-		MInt32				detectFaceMaxNum,			// [in] �����Ҫ������������
-		MInt32				combinedMask,				// [in] �û�ѡ����Ҫ���Ĺ�����ϣ��ɵ�������
-		MHandle*			hEngine						// [out] ��ʼ�����ص�����handle
-		);
-
-	/************************************************************************
-	* ȡֵ��Χ[0-1]�� Ĭ����ֵ:0.8�� �û����Ը���ʵ�����������ڵ���Χ
-	************************************************************************/
-	MRESULT ASFSetFaceShelterParam(
-		MHandle hEngine,					// [in] ����handle
-		MFloat  ShelterThreshhold			// [in] �ڵ���ֵ
-		);
-
-	/******************************************************
-	* VIDEOģʽ:����׷�� IMAGEģʽ:�������
-	******************************************************/
-	MRESULT ASFDetectFaces(
-		MHandle				hEngine,							// [in] ����handle
-		MInt32				width,								// [in] ͼƬ����
-		MInt32				height,								// [in] ͼƬ�߶�
-		MInt32				format,								// [in] ��ɫ�ռ��ʽ
-		MUInt8*				imgData,							// [in] ͼƬ����
-		LPASF_MultiFaceInfo	detectedFaces,						// [out]��⵽��������Ϣ
-		ASF_DetectModel 	detectModel							// [in] Ԥ���ֶΣ���ǰ�汾ʹ��Ĭ�ϲ�������
-		);
-
-	/******************************************************
-	* VIDEOģʽ:����׷�� IMAGEģʽ:�������
-	* ͼ�������Խṹ����ʽ���룬�Բ��ø����ֽڶ��뷽ʽ��ͼ������Ը���
-	******************************************************/
-	MRESULT ASFDetectFacesEx(
-		MHandle				hEngine,							// [in] ����handle
-		LPASF_ImageData		imgData,							// [in] ͼƬ����
-		LPASF_MultiFaceInfo	detectedFaces,						// [out] ��⵽��������Ϣ
-		ASF_DetectModel 	detectModel							// [in]	Ԥ���ֶΣ���ǰ�汾ʹ��Ĭ�ϲ�������
-		);
-
-	/******************************************************
-	* �����޸ĺ�������򣬸���������Ϣ��������˫Ŀ�������������
-	* ע�⣺LPASF_MultiFaceInfo�ڸýӿ��м������Ҳ�ǳ���
-	******************************************************/
-	MRESULT ASFUpdateFaceData(
-		MHandle				hEngine,				// [in] ����handle
-		MInt32				width, 					// [in] ͼƬ����
-		MInt32				height, 				// [in] ͼƬ�߶�
-		MInt32				format,					// [in] ��ɫ�ռ��ʽ
-		MUInt8 *			imgData, 				// [in] ͼƬ����
-		LPASF_MultiFaceInfo detectedFaces			// [in/out]��⵽��������Ϣ
-		);
-
-	/******************************************************
-	* �����޸ĺ�������򣬸���������Ϣ��������˫Ŀ�������������
-	* ע�⣺LPASF_MultiFaceInfo�ڸýӿ��м������Ҳ�ǳ���
-	* ͼ�������Խṹ����ʽ���룬�Բ��ø����ֽڶ��뷽ʽ��ͼ������Ը���
-	******************************************************/
-	MRESULT ASFUpdateFaceDataEx(
-		MHandle                 hEngine,							// [in] ����handle
-		LPASF_ImageData		    imgData,							// [in] ͼ������
-		LPASF_MultiFaceInfo	    detectedFaces						// [in/out] ��⵽��������Ϣ
-		);
-
-	/******************************************************
-	* ͼ��������⣬��RGBģʽ�� ʶ����ֵ��0.49 ע����ֵ��0.63  ����ģʽ��ʶ����ֵ��0.29��
-	******************************************************/
-	MRESULT ASFImageQualityDetect(
-		MHandle					hEngine,							// [in] ����handle
-		MInt32					width,								// [in] ͼƬ����
-		MInt32					height,								// [in] ͼƬ�߶�
-		MInt32					format,								// [in] ��ɫ�ռ��ʽ
-		MUInt8 *				imgData,							// [in] ͼƬ����
-		LPASF_SingleFaceInfo	faceInfo,							// [in] ����λ����Ϣ
-		MInt32					isMask,								// [in] ��֧�ִ���1��0��-1�������� 1��������Ϊδ������
-		MFloat*					confidenceLevel,					// [out] ͼ�����������
-		ASF_DetectModel			detectModel							// [in]	Ԥ���ֶΣ���ǰ�汾ʹ��Ĭ�ϲ�������
-		);
-
-	/******************************************************
-	* ͼ��������⣬��RGBģʽ�� ʶ����ֵ��0.49 ע����ֵ��0.63  ����ģʽ��ʶ����ֵ��0.29��
-	* ͼ�������Խṹ����ʽ���룬�Բ��ø����ֽڶ��뷽ʽ��ͼ������Ը���
-	******************************************************/
-	MRESULT ASFImageQualityDetectEx(
-		MHandle					hEngine,							// [in] ����handle
-		LPASF_ImageData			imgData,							// [in] ͼƬ����
-		LPASF_SingleFaceInfo	faceInfo,							// [in] ����λ����Ϣ
-		MInt32					isMask,                             // [in] ��֧�ִ���1��0��-1�������� 1��������Ϊδ������
-		MFloat*              	confidenceLevel,					// [out] ͼ�����������
-		ASF_DetectModel			detectModel							// [in]	Ԥ���ֶΣ���ǰ�汾ʹ��Ĭ�ϲ�������
-		);
-
-	/************************************************************************
-	* ����/�Ա�/����3D�Ƕ�/����/�ڵ�/��ͷ���򣨸ýӿڽ�֧��RGBͼ�񣩣����֧��4��������Ϣ��⣬�������ַ���δ֪
-	* RGB�����֧�ֵ�������⣬�ýӿڲ�֧�ּ��IR����
-	************************************************************************/
-	MRESULT ASFProcess(
-		MHandle				hEngine,			// [in] ����handle
-		MInt32				width,				// [in] ͼƬ����
-		MInt32				height,				// [in] ͼƬ�߶�
-		MInt32				format,				// [in] ��ɫ�ռ��ʽ
-		MUInt8*				imgData,			// [in] ͼƬ����
-		LPASF_MultiFaceInfo	detectedFaces,		// [in] ������Ϣ���û����ݴ����Ĺ���ѡ����Ҫʹ�õ�������
-		MInt32				combinedMask		// [in] ֻ֧�ֳ�ʼ��ʱ��ָ����Ҫ���Ĺ��ܣ���processʱ��һ��������Ѿ�ָ���Ĺ��ܼ��м���ɸѡ
-												//      �����ʼ����ʱ��ָ�����������Ա���process��ʱ�����ֻ������䣬���ǲ��ܼ���������Ա�֮��Ĺ���
-		);
-
-	/************************************************************************
-	* ����/�Ա�/����3D�Ƕ�/����/�ڵ�/��ͷ���򣨸ýӿڽ�֧��RGBͼ�񣩣����֧��4��������Ϣ��⣬�������ַ���δ֪
-	* RGB�����֧�ֵ�������⣬�ýӿڲ�֧�ּ��IR����
-	* ͼ�������Խṹ����ʽ���룬�Բ��ø����ֽڶ��뷽ʽ��ͼ������Ը���
-	************************************************************************/
-	MRESULT ASFProcessEx(
-		MHandle				hEngine,			// [in] ����handle
-		LPASF_ImageData		imgData,			// [in] ͼƬ����
-		LPASF_MultiFaceInfo detectedFaces,		// [in] ������Ϣ���û����ݴ����Ĺ���ѡ����Ҫʹ�õ�������
-		MInt32				combinedMask		// [in] ֻ֧�ֳ�ʼ��ʱ��ָ����Ҫ���Ĺ��ܣ���processʱ��һ��������Ѿ�ָ���Ĺ��ܼ��м���ɸѡ
-		//      �����ʼ����ʱ��ָ�����������Ա���process��ʱ�����ֻ������䣬���ǲ��ܼ���������Ա�֮��Ĺ���
-		);
-
-	/************************************************************************
-	* �ýӿ�Ŀǰ��֧�ֵ�����IR�����⣬Ĭ��ȡ��һ������
-	************************************************************************/
-	MRESULT ASFProcess_IR(
-		MHandle				hEngine,			// [in] ����handle
-		MInt32				width,				// [in] ͼƬ����
-		MInt32				height,				// [in] ͼƬ�߶�
-		MInt32				format,				// [in] ��ɫ�ռ��ʽ
-		MUInt8*				imgData,			// [in] ͼƬ����
-		LPASF_MultiFaceInfo	detectedFaces,		// [in] ������Ϣ���û����ݴ����Ĺ���ѡ����Ҫʹ�õ�������
-		MInt32				combinedMask		// [in] Ŀǰֻ֧�ִ���ASF_IR_LIVENESS���ԵĴ��룬�ҳ�ʼ���ӿ���Ҫ����
-		);
-
-	/************************************************************************
-	* �ýӿ�Ŀǰ��֧�ֵ�����IR�����⣬Ĭ��ȡ��һ������
-	* ͼ�������Խṹ����ʽ���룬�Բ��ø����ֽڶ��뷽ʽ��ͼ������Ը���
-	************************************************************************/
-	MRESULT ASFProcessEx_IR(
-		MHandle				hEngine,			// [in] ����handle
-		LPASF_ImageData		imgData,			// [in] ͼƬ����
-		LPASF_MultiFaceInfo detectedFaces,		// [in] ������Ϣ���û����ݴ����Ĺ���ѡ����Ҫʹ�õ�������
-		MInt32				combinedMask		// [in] Ŀǰֻ֧�ִ���ASF_IR_LIVENESS���ԵĴ��룬�ҳ�ʼ���ӿ���Ҫ����
-		);
-
-	//******************************** ����ʶ����� *********************************************
-	typedef struct FaceFeature {
-		MByte*		feature;		// ����������Ϣ
-		MInt32		featureSize;	// ����������Ϣ����
-	}ASF_FaceFeature, *LPASF_FaceFeature;
-
-	/************************************************************************
-	* ������������ȡ
-	************************************************************************/
-	MRESULT ASFFaceFeatureExtract(
-		MHandle					hEngine,							// [in]	����handle
-		MInt32					width,								// [in] ͼƬ����
-		MInt32					height,								// [in] ͼƬ�߶�
-		MInt32					format,								// [in] ��ɫ�ռ��ʽ
-		MUInt8*					imgData,							// [in] ͼƬ����
-		LPASF_SingleFaceInfo	faceInfo,							// [in] ��������λ�úͽǶ���Ϣ
-		ASF_RegisterOrNot		registerOrNot,						// [in] ע�� 1 ʶ��Ϊ 0
-		MInt32					mask,								// [in] ������ 1������0
-		LPASF_FaceFeature		feature								// [out] ��������
-		);
-
-	/************************************************************************
-	* ������������ȡ
-	* ͼ�������Խṹ����ʽ���룬�Բ��ø����ֽڶ��뷽ʽ��ͼ������Ը���
-	************************************************************************/
-	MRESULT ASFFaceFeatureExtractEx(
-		MHandle					hEngine,							// [in]	����handle
-		LPASF_ImageData			imgData,							// [in] ͼ������
-		LPASF_SingleFaceInfo	faceInfo,							// [in] ��������λ�úͽǶ���Ϣ
-		ASF_RegisterOrNot		registerOrNot,						// [in] ע�� 1 ʶ��Ϊ 0
-		MInt32					mask,								// [in] ������ 1������0
-		LPASF_FaceFeature		feature								// [out] ��������
-		);
-
-	/************************************************************************
-	* ���������ȶԣ��Ƽ���ֵ ASF_LIFE_PHOTO��0.80  ASF_ID_PHOTO��0.82
-	************************************************************************/
-	MRESULT ASFFaceFeatureCompare(
-		MHandle					hEngine,						// [in] ����handle
-		LPASF_FaceFeature		feature1,						// [in] ���Ƚ���������1
-		LPASF_FaceFeature		feature2,						// [in] ���Ƚ���������2
-		MFloat*					confidenceLevel,				// [out] �ȽϽ�������Ŷ���ֵ
-		ASF_CompareModel		compareModel					// [in] ASF_LIFE_PHOTO������������֮��������ȶ�
-																//		ASF_ID_PHOTO������֤���ջ�֤���պ�������֮��������ȶ�
-		);
-
-	//******************************** ������� **********************************************
-	typedef struct AgeInfo {
-		MInt32*	ageArray;				// "0" ������ȷ��������0����ֵ������������������
-		MInt32	num;					// ������������
-	}ASF_AgeInfo, *LPASF_AgeInfo;
-
-	/************************************************************************
-	* ��ȡ������Ϣ
-	************************************************************************/
-	MRESULT ASFGetAge(
-		MHandle hEngine,				// [in] ����handle
-		LPASF_AgeInfo ageInfo			// [out] ��⵽��������Ϣ
-		);
-
-	//******************************** �Ա���� **********************************************
-	typedef struct GenderInfo {
-		MInt32*	genderArray;			// "0" ��ʾ ����, "1" ��ʾ Ů��, "-1" ��ʾ��ȷ��
-		MInt32	num;					// ������������
-	}ASF_GenderInfo, *LPASF_GenderInfo;
-
-	/************************************************************************
-	* ��ȡ�Ա���Ϣ
-	************************************************************************/
-	MRESULT ASFGetGender(
-		MHandle hEngine,				// [in] ����handle
-		LPASF_GenderInfo genderInfo		// [out] ��⵽���Ա���Ϣ
-		);
-
-	//******************************** ����3D �Ƕ���Ϣ ***********************************
-	typedef struct Face3DAngle {
+	//3D角度信息
+	typedef struct
+	{
 		MFloat* roll;
 		MFloat* yaw;
 		MFloat* pitch;
-		MInt32* status;
-		MInt32 num;
-	}ASF_Face3DAngle, *LPASF_Face3DAngle;
+	}ASF_Face3DAngleInfo, *LPASF_Face3DAngleInfo;
 
-	/************************************************************************
-	* ��ȡ3D�Ƕ���Ϣ
-	************************************************************************/
-	MRESULT ASFGetFace3DAngle(
-		MHandle hEngine,					// [in] ����handle
-		LPASF_Face3DAngle p3DAngleInfo		// [out] ��⵽����3D �Ƕ���Ϣ
+	//人脸信息
+	typedef struct{
+		MPVoid		data;		// 人脸信息
+		MInt32		dataSize;	// 人脸信息长度
+	} ASF_FaceDataInfo, *LPASF_FaceDataInfo;
+
+	//单人脸信息
+	typedef struct {
+		MRECT		faceRect;		        // 人脸框信息
+		MInt32		faceOrient;		        // 输入图像的角度，可以参考 ArcFaceCompare_OrientCode
+		ASF_FaceDataInfo faceDataInfo;      // 单张人脸信息
+	} ASF_SingleFaceInfo, *LPASF_SingleFaceInfo;
+
+	//多人脸框信息
+	typedef struct{
+		MInt32                  faceNum;                // 检测到的人脸个数
+		MRECT*                  faceRect;               // 人脸框信息
+		MInt32*                 faceOrient;             // 输入图像的角度，可以参考 ArcFace_OrientCode .
+		MInt32*                 faceID;                 // face ID
+		LPASF_FaceDataInfo      faceDataInfoList;	    // 人脸检测信息
+		MInt32*                 faceIsWithinBoundary;   // 人脸是否在边界内 0 人脸溢出；1 人脸在图像边界内
+		MRECT*                  foreheadRect;           // 人脸额头区域
+		ASF_FaceAttributeInfo   faceAttributeInfo;      // 人脸属性信息
+		ASF_Face3DAngleInfo     face3DAngleInfo;        // 人脸3D角度
+	}ASF_MultiFaceInfo, *LPASF_MultiFaceInfo;
+
+	// 激活文件信息
+	typedef struct {
+		MPChar startTime;		//开始时间
+		MPChar endTime;			//截止时间
+		MPChar activeKey;		//激活码
+		MPChar platform;		//平台
+		MPChar sdkType;			//sdk类型
+		MPChar appId;			//APPID
+		MPChar sdkKey;			//SDKKEY
+		MPChar sdkVersion;		//SDK版本号
+		MPChar fileVersion;		//激活文件版本号
+	}ASF_ActiveFileInfo, *LPASF_ActiveFileInfo;
+
+	/*******************************************************************************************
+	* 获取激活文件信息接口
+	*******************************************************************************************/
+	MRESULT ASFGetActiveFileInfo(
+		LPASF_ActiveFileInfo  activeFileInfo  // [out] 激活文件信息
 		);
 
-	//******************************** ������Ϣ ***********************************
-	typedef struct LivenessThreshold {
+	/*******************************************************************************************
+	* 在线激活接口
+	*******************************************************************************************/
+	MRESULT ASFOnlineActivation(
+		MPChar				AppId,			// [in]  APPID	官网下载
+		MPChar				SDKKey,			// [in]  SDKKEY	官网下载
+		MPChar				ActiveKey		// [in]  ActiveKey	官网下载
+		);
+
+	/*******************************************************************************************
+	* 获取设备信息接口
+	*******************************************************************************************/
+	MRESULT ASFGetActiveDeviceInfo(
+		MPChar*				deviceInfo		// [out] 采集的设备信息，用于到开发者中心做离线激活，生成离线授权文件
+		);
+
+	/*******************************************************************************************
+	* 离线激活接口
+	*******************************************************************************************/
+	MRESULT ASFOfflineActivation(
+		MPChar				filePath		// [in]  许可文件路径(离线授权文件)，需要读写权限
+		);
+
+	/************************************************************************
+	* 初始化引擎
+	************************************************************************/
+	MRESULT ASFInitEngine(
+		ASF_DetectMode		detectMode,					// [in]	AF_DETECT_MODE_VIDEO 视频模式：适用于摄像头预览，视频文件识别
+														//		AF_DETECT_MODE_IMAGE 图片模式：适用于静态图片的识别
+		ASF_OrientPriority	detectFaceOrientPriority,	// [in]	检测脸部的角度优先值，参考 ArcFaceCompare_OrientPriority
+		MInt32				detectFaceMaxNum,			// [in] 最大需要检测的人脸个数
+		MInt32				combinedMask,				// [in] 用户选择需要检测的功能组合，可单个或多个
+		MHandle*			hEngine						// [out] 初始化返回的引擎handle
+		);
+
+	//******************************** 人脸 属性阈值 ***********************************
+	typedef struct {
+		MFloat  eyeOpenThreshold;			// [in] 睁眼幅度阈值，阈值越大睁眼幅度越大
+		MFloat  mouthCloseThreshold;        // [in] 张嘴幅度阈值，阈值越大，张嘴幅度越小
+		MFloat  wearGlassesThreshold;       // [in] 佩戴眼镜阈值
+	}ASF_FaceAttributeThreshold, *LPASF_FaceAttributeThreshold;
+
+	/************************************************************************
+	* 取值范围[0-1]， 默认阈值均为:0.5， 用户可以根据实际需求，设置遮挡范围
+	************************************************************************/
+	MRESULT ASFSetFaceAttributeParam(
+		MHandle hEngine,					                // [in] 引擎handle
+		LPASF_FaceAttributeThreshold attributeThreshold       // [in] 人脸属性阈值
+		);
+
+	/******************************************************
+	* VIDEO模式:人脸追踪 IMAGE模式:人脸检测
+	******************************************************/
+	MRESULT ASFDetectFaces(
+		MHandle				hEngine,							// [in] 引擎handle
+		MInt32				width,								// [in] 图片宽度
+		MInt32				height,								// [in] 图片高度
+		MInt32				format,								// [in] 颜色空间格式
+		MUInt8*				imgData,							// [in] 图片数据
+		LPASF_MultiFaceInfo	detectedFaces,						// [out]检测到的人脸信息 
+		ASF_DetectModel		detectModel = ASF_DETECT_MODEL_RGB	// [in] 预留字段，当前版本使用默认参数即可
+		);
+
+	/******************************************************
+	* VIDEO模式:人脸追踪 IMAGE模式:人脸检测
+	* 图像数据以结构体形式传入，对采用更高字节对齐方式的图像兼容性更好
+	******************************************************/
+	MRESULT ASFDetectFacesEx(
+		MHandle				hEngine,							// [in] 引擎handle
+		LPASF_ImageData		imgData,							// [in] 图片数据
+		LPASF_MultiFaceInfo	detectedFaces,						// [out] 检测到的人脸信息
+		ASF_DetectModel		detectModel = ASF_DETECT_MODEL_RGB	// [in]	预留字段，当前版本使用默认参数即可
+		);
+
+	/******************************************************
+	* 传入修改后的人脸框，更新人脸信息，用于做双目对齐或其他策略
+	* 注意：LPASF_MultiFaceInfo在该接口中既是入参也是出参
+	******************************************************/
+	MRESULT ASFUpdateFaceData(
+		MHandle				hEngine,				// [in] 引擎handle
+		MInt32				width, 					// [in] 图片宽度
+		MInt32				height, 				// [in] 图片高度
+		MInt32				format,					// [in] 颜色空间格式
+		MUInt8 *			imgData, 				// [in] 图片数据
+		LPASF_MultiFaceInfo detectedFaces			// [in/out]检测到的人脸信息 
+		);
+
+	/******************************************************
+	* 传入修改后的人脸框，更新人脸信息，用于做双目对齐或其他策略
+	* 注意：LPASF_MultiFaceInfo在该接口中既是入参也是出参
+	* 图像数据以结构体形式传入，对采用更高字节对齐方式的图像兼容性更好
+	******************************************************/
+	MRESULT ASFUpdateFaceDataEx(
+		MHandle             hEngine,				// [in] 引擎handle
+		LPASF_ImageData		imgData,				// [in] 图像数据
+		LPASF_MultiFaceInfo detectedFaces			// [in/out] 检测到的人脸信息
+		);
+
+	/******************************************************
+	* 图像质量检测，（RGB模式： 识别阈值：0.49 注册阈值：0.63  口罩模式：识别阈值：0.29）
+	******************************************************/
+	MRESULT ASFImageQualityDetect(
+		MHandle					hEngine,							// [in] 引擎handle
+		MInt32					width,								// [in] 图片宽度
+		MInt32					height,								// [in] 图片高度
+		MInt32					format,								// [in] 颜色空间格式
+		MUInt8 *				imgData,							// [in] 图片数据
+		LPASF_SingleFaceInfo	faceInfo,							// [in] 人脸位置信息 
+		MInt32					isMask,								// [in] 仅支持传入1、0、-1，戴口罩 1，否则认为未戴口罩
+		MFloat*					confidenceLevel,					// [out] 图像质量检测结果
+		ASF_DetectModel			detectModel = ASF_DETECT_MODEL_RGB	// [in]	预留字段，当前版本使用默认参数即可
+		);
+
+	/******************************************************
+	* 图像质量检测，（RGB模式： 识别阈值：0.49 注册阈值：0.63  口罩模式：识别阈值：0.29）
+	* 图像数据以结构体形式传入，对采用更高字节对齐方式的图像兼容性更好
+	******************************************************/
+	MRESULT ASFImageQualityDetectEx(
+		MHandle					hEngine,							// [in] 引擎handle
+		LPASF_ImageData			imgData,							// [in] 图片数据
+		LPASF_SingleFaceInfo	faceInfo,							// [in] 人脸位置信息 
+		MInt32					isMask,                             // [in] 仅支持传入1、0、-1，戴口罩 1，否则认为未戴口罩
+		MFloat*              	confidenceLevel,					// [out] 图像质量检测结果
+		ASF_DetectModel			detectModel = ASF_DETECT_MODEL_RGB	// [in]	预留字段，当前版本使用默认参数即可
+		);
+
+	/************************************************************************
+	* 年龄/性别/人脸3D角度/口罩/遮挡/额头区域（该接口仅支持RGB图像），最多支持4张人脸信息检测，超过部分返回未知
+	* RGB活体仅支持单人脸检测，该接口不支持检测IR活体
+	************************************************************************/
+	MRESULT ASFProcess(
+		MHandle				hEngine,			// [in] 引擎handle
+		MInt32				width,				// [in] 图片宽度
+		MInt32				height,				// [in] 图片高度
+		MInt32				format,				// [in] 颜色空间格式
+		MUInt8*				imgData,			// [in] 图片数据
+		LPASF_MultiFaceInfo	detectedFaces,		// [in] 人脸信息，用户根据待检测的功能选择需要使用的人脸。
+		MInt32				combinedMask		// [in] 只支持初始化时候指定需要检测的功能，在process时进一步在这个已经指定的功能集中继续筛选
+												//      例如初始化的时候指定检测年龄和性别，在process的时候可以只检测年龄，但是不能检测除年龄和性别之外的功能    
+		);
+
+	/************************************************************************
+	* 年龄/性别/人脸3D角度/口罩/遮挡/额头区域（该接口仅支持RGB图像），最多支持4张人脸信息检测，超过部分返回未知
+	* RGB活体仅支持单人脸检测，该接口不支持检测IR活体
+	* 图像数据以结构体形式传入，对采用更高字节对齐方式的图像兼容性更好
+	************************************************************************/
+	MRESULT ASFProcessEx(
+		MHandle				hEngine,			// [in] 引擎handle
+		LPASF_ImageData		imgData,			// [in] 图片数据
+		LPASF_MultiFaceInfo detectedFaces,		// [in] 人脸信息，用户根据待检测的功能选择需要使用的人脸。
+		MInt32				combinedMask		// [in] 只支持初始化时候指定需要检测的功能，在process时进一步在这个已经指定的功能集中继续筛选
+												//      例如初始化的时候指定检测年龄和性别，在process的时候可以只检测年龄，但是不能检测除年龄和性别之外的功能 
+		);
+
+	/************************************************************************
+	* 该接口目前仅支持单人脸IR活体检测，默认取第一张人脸
+	************************************************************************/
+	MRESULT ASFProcess_IR(
+		MHandle				hEngine,			// [in] 引擎handle
+		MInt32				width,				// [in] 图片宽度
+		MInt32				height,				// [in] 图片高度
+		MInt32				format,				// [in] 颜色空间格式
+		MUInt8*				imgData,			// [in] 图片数据
+		LPASF_MultiFaceInfo	detectedFaces,		// [in] 人脸信息，用户根据待检测的功能选择需要使用的人脸。
+		MInt32				combinedMask		// [in] 目前只支持传入ASF_IR_LIVENESS属性的传入，且初始化接口需要传入 
+		);
+
+	/************************************************************************
+	* 该接口目前仅支持单人脸IR活体检测，默认取第一张人脸
+	* 图像数据以结构体形式传入，对采用更高字节对齐方式的图像兼容性更好
+	************************************************************************/
+	MRESULT ASFProcessEx_IR(
+		MHandle				hEngine,			// [in] 引擎handle
+		LPASF_ImageData		imgData,			// [in] 图片数据
+		LPASF_MultiFaceInfo detectedFaces,		// [in] 人脸信息，用户根据待检测的功能选择需要使用的人脸。
+		MInt32				combinedMask		// [in] 目前只支持传入ASF_IR_LIVENESS属性的传入，且初始化接口需要传入
+		);
+
+	//******************************** 人脸识别相关 *********************************************
+	typedef struct {
+		MByte*		feature;		// 人脸特征信息
+		MInt32		featureSize;	// 人脸特征信息长度	
+	}ASF_FaceFeature, *LPASF_FaceFeature;
+
+    typedef struct{
+        MInt32      searchId;       // 唯一标识符
+        LPASF_FaceFeature feature;  // 人脸特征值
+        MPCChar     tag;            // 备注
+    }ASF_FaceFeatureInfo, *LPASF_FaceFeatureInfo;
+	/************************************************************************
+	* 单人脸特征提取
+	************************************************************************/
+	MRESULT ASFFaceFeatureExtract(
+		MHandle					hEngine,							// [in]	引擎handle
+		MInt32					width,								// [in] 图片宽度
+		MInt32					height,								// [in] 图片高度
+		MInt32					format,								// [in] 颜色空间格式
+		MUInt8*					imgData,							// [in] 图片数据
+		LPASF_SingleFaceInfo	faceInfo,							// [in] 单张人脸位置和角度信息
+		ASF_RegisterOrNot		registerOrNot,						// [in] 注册 1 识别为 0
+		MInt32					mask,								// [in] 带口罩 1，否则0
+		LPASF_FaceFeature		feature								// [out] 人脸特征
+		);
+
+	/************************************************************************
+	* 单人脸特征提取
+	* 图像数据以结构体形式传入，对采用更高字节对齐方式的图像兼容性更好
+	************************************************************************/
+	MRESULT ASFFaceFeatureExtractEx(
+		MHandle					hEngine,							// [in]	引擎handle
+		LPASF_ImageData			imgData,							// [in] 图像数据
+		LPASF_SingleFaceInfo	faceInfo,							// [in] 单张人脸位置和角度信息
+		ASF_RegisterOrNot		registerOrNot,						// [in] 注册 1 识别为 0
+		MInt32					mask,								// [in] 带口罩 1，否则0
+		LPASF_FaceFeature		feature								// [out] 人脸特征
+		);
+
+	/************************************************************************
+	* 人脸特征比对，推荐阈值 ASF_LIFE_PHOTO：0.80  ASF_ID_PHOTO：0.82
+	************************************************************************/
+	MRESULT ASFFaceFeatureCompare(
+		MHandle					hEngine,						// [in] 引擎handle
+		LPASF_FaceFeature		feature1,						// [in] 待比较人脸特征1
+		LPASF_FaceFeature		feature2,						// [in] 待比较人脸特征2
+		MFloat*					confidenceLevel,				// [out] 比较结果，置信度数值
+		ASF_CompareModel		compareModel = ASF_LIFE_PHOTO	// [in] ASF_LIFE_PHOTO：用于生活照之间的特征比对
+																//		ASF_ID_PHOTO：用于证件照或证件照和生活照之间的特征比对
+		);
+
+    /************************************************************************
+    * 搜索人脸特征，推荐阈值 ASF_LIFE_PHOTO：0.80  ASF_ID_PHOTO：0.82
+    ************************************************************************/
+    MRESULT ASFFaceFeatureCompare_Search(
+            MHandle					hEngine,		                // [in] 　引擎handle
+            LPASF_FaceFeature    	feature,	                    // [in] 　待比较人脸特征
+            MFloat*                 confidenceLevel,                // [out]　比较结果，最大置信度数值
+            LPASF_FaceFeatureInfo   featureInfo,                    // [out]  最大置信度人脸信息
+            ASF_CompareModel		compareModel = ASF_LIFE_PHOTO   // [in]   搜索模式
+    );
+
+    /************************************************************************
+    * 注册人脸特征
+    ************************************************************************/
+    MRESULT ASFRegisterFaceFeature(
+            MHandle hEngine,                            // [in] 　引擎handle
+            LPASF_FaceFeatureInfo featureInfoList,      // [in]   注册列表
+            MInt32 size                                 // [in]   列表数量
+    );
+
+    /************************************************************************
+    * 删除人脸特征
+    ************************************************************************/
+    MRESULT ASFRemoveFaceFeature(
+            MHandle hEngine,                            // [in] 　引擎handle
+            MInt32 searchId                             // [in] 　待删除人脸ID
+   );
+
+    /************************************************************************
+    * 更新人脸特征
+    ************************************************************************/
+    MRESULT ASFUpdateFaceFeature(
+            MHandle hEngine,                            // [in] 　引擎handle
+            LPASF_FaceFeatureInfo featureInfo           // [in] 　待更新人脸特征
+    );
+
+    /************************************************************************
+    * 获取人脸特征
+    ************************************************************************/
+    MRESULT ASFGetFaceFeature(
+            MHandle hEngine,                            // [in] 　引擎handle
+            MInt32 searchId,                            // [in] 　查询人脸ID
+            LPASF_FaceFeatureInfo featureInfo           // [out]  注册时信息
+    );
+
+    /************************************************************************
+    * 获取人脸数量
+    ************************************************************************/
+    MRESULT ASFGetFaceCount(
+            MHandle hEngine,                            // [in] 　引擎handle
+            MInt32* num                                 // [out]  人脸数量
+    );
+
+//******************************** 年龄相关 **********************************************
+	typedef struct {
+		MInt32*	ageArray;				// "0" 代表不确定，大于0的数值代表检测出来的年龄结果
+		MInt32	num;					// 检测的人脸个数
+	}ASF_AgeInfo, *LPASF_AgeInfo;
+
+	/************************************************************************
+	* 获取年龄信息
+	************************************************************************/
+	MRESULT ASFGetAge(
+		MHandle hEngine,				// [in] 引擎handle
+		LPASF_AgeInfo ageInfo			// [out] 检测到的年龄信息
+		);
+
+	//******************************** 性别相关 **********************************************
+	typedef struct {
+		MInt32*	genderArray;			// "0" 表示 男性, "1" 表示 女性, "-1" 表示不确定
+		MInt32	num;					// 检测的人脸个数	
+	}ASF_GenderInfo, *LPASF_GenderInfo;
+
+	/************************************************************************
+	* 获取性别信息
+	************************************************************************/
+	MRESULT ASFGetGender(
+		MHandle hEngine,				// [in] 引擎handle
+		LPASF_GenderInfo genderInfo		// [out] 检测到的性别信息
+		);
+
+	//******************************** 活体信息 ***********************************
+	typedef struct {
 		MFloat		thresholdmodel_BGR;
 		MFloat		thresholdmodel_IR;
+        MFloat		thresholdmodel_FQ;
 	}ASF_LivenessThreshold, *LPASF_LivenessThreshold;
 
+    /************************************************************************
+    * 获取相关活体阈值
+    ************************************************************************/
+    MRESULT ASFGetLivenessParam(
+        MHandle					hEngine,		// [in] 引擎handle
+        LPASF_LivenessThreshold threshold		// [out] 活体置信度
+    );
+
 	/************************************************************************
-	* ȡֵ��Χ[0-1]��Ĭ��ֵ BGR:0.5 IR:0.7�� �û����Ը���ʵ���������ò�ͬ����ֵ
+	* 取值范围[0-1]，默认值 BGR:0.5 IR:0.5， FQ:0.65, 用户可以根据实际需求，设置不同的阈值
 	************************************************************************/
 	MRESULT ASFSetLivenessParam(
-		MHandle					hEngine,		// [in] ����handle
-		LPASF_LivenessThreshold threshold		// [in] �������Ŷ�
+		MHandle					hEngine,		// [in] 引擎handle
+		LPASF_LivenessThreshold threshold		// [in] 活体置信度
 		);
 
-	typedef struct LivenessInfo {
-		MInt32*	isLive;			// [out] �ж��Ƿ����ˣ� 0�������ˣ�
-		//						1�����ˣ�
-		//						-1����ȷ����
-		//						-2:����������>1��
-		//                      -3: ������С
-		//                      -4: �Ƕȹ���
-		//                      -5: ���������߽�
-		//					    -6: ���ͼ����
-		//					    -7: ����ͼ̫����
+	typedef struct {
+		MInt32*	isLive;			// [out] 判断是否真人， 0：非真人；
+								// 1：真人；
+								// -1：不确定；
+								// -2:传入人脸数>1；
+								// -3: 人脸过小
+								// -4: 角度过大
+								// -5: 人脸超出边界
+								// -6: 深度图错误
+								// -7: 红外图太亮了
+                                // -8: 红外图太暗了
+                                // -100: 人脸质量错误
 		MInt32 num;
 	}ASF_LivenessInfo, *LPASF_LivenessInfo;
 
 	/************************************************************************
-	* ��ȡRGB������
+	* 获取RGB活体结果
 	************************************************************************/
 	MRESULT ASFGetLivenessScore(
-		MHandle hEngine,					// [in] ����handle
-		LPASF_LivenessInfo livenessInfo		// [out] ���RGB������
+		MHandle hEngine,					// [in] 引擎handle
+		LPASF_LivenessInfo livenessInfo		// [out] 检测RGB活体结果
 		);
 
 	/************************************************************************
-	* ��ȡIR������
+	* 获取IR活体结果
 	************************************************************************/
 	MRESULT ASFGetLivenessScore_IR(
-		MHandle				hEngine,			// [in] ����handle
-		LPASF_LivenessInfo	 irLivenessInfo		// [out] ��⵽IR������
+		MHandle				hEngine,			// [in] 引擎handle
+		LPASF_LivenessInfo	 irLivenessInfo		// [out] 检测到IR活体结果
 		);
 
-	//******************************** ���ּ����� **********************************************
-	typedef struct MaskInfo
+	//******************************** 口罩检测相关 **********************************************
+	typedef struct
 	{
-		MInt32*	maskArray;				// "0" ����û�д����֣�"1"���������� ,"-1"����ȷ��
-		MInt32	num;					// ������������
+		MInt32*	maskArray;				// "0" 代表没有带口罩，"1"代表带口罩 ,"-1"表不确定
+		MInt32	num;					// 检测的人脸个数
 	}ASF_MaskInfo, *LPASF_MaskInfo;
 
 	/************************************************************************
-	* ��ȡ���ּ��Ľ��
+	* 获取口罩检测的结果
 	************************************************************************/
 	MRESULT ASFGetMask(
-		MHandle hEngine,				// [in] ����handle
-		LPASF_MaskInfo maskInfo			// [out] ��⵽�Ŀ��ּ�����
-		);
-
-	//******************************** ��ͷ��������� **********************************************
-
-	#define LANDMARKS_NUM 4	//���������
-
-	typedef struct
-	{
-		MFloat x;
-		MFloat y;
-	}ASF_FaceLandmark, *LPASF_FaceLandmark;
-
-	typedef struct LandMarkInfo
-	{
-		ASF_FaceLandmark *point;		//��ͷ��λ
-		MInt32 num;						//��������
-	}ASF_LandMarkInfo, *LPASF_LandMarkInfo;
-
-	/************************************************************************
-	* ��ȡ��ͷ������������ǰֻ֧��0, 90, 180, 270�ȽǼ�⣩
-	************************************************************************/
-	MRESULT ASFGetFaceLandMark(
-		MHandle				engine,			 // [in] ����handle
-		LPASF_LandMarkInfo  LandMarkInfo	 // [out]������ͷ�����飬ÿ��������ͷ����ͨ���ĸ����ʾ
+		MHandle hEngine,				// [in] 引擎handle
+		LPASF_MaskInfo maskInfo			// [out] 检测到的口罩检测相关
 		);
 
 	/************************************************************************
-	* ��������
+	* 销毁引擎
 	************************************************************************/
 	MRESULT ASFUninitEngine(
 		MHandle hEngine
 		);
 
 	/************************************************************************
-	* ��ȡ�汾��Ϣ
+	* 获取版本信息
 	************************************************************************/
 	const ASF_VERSION ASFGetVersion();
 

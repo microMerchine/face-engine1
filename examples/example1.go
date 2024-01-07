@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	. "github.com/loouss/face-engine1/v4"
-	"github.com/loouss/face-engine1/v4/util"
+	. "github.com/microMerchine/face-engine1/v4"
+	"github.com/microMerchine/face-engine1/v4/util"
 )
 
 var imageInfo = util.GetResizedImageInfo("./mask.jpg")

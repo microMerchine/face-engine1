@@ -753,3 +753,36 @@ func imageDataToASVLOFFSCREEN(imageData ImageData) C.LPASVLOFFSCREEN {
 		ppu8Plane,
 		pi32Pitch}
 }
+func (engine *FaceEngine) FaceRegister(featureList []*FaceFeature, size uint32) (err error) {
+	r := C.ASFRegisterFaceFeature(engine.handle, featureList, size)
+	if r != C.MOK {
+		err := newError(int(r), "destroy fail")
+		return err
+	}
+	return nil
+}
+
+func (engine *FaceEngine) FaceFeatureCompareSearch(feature *FaceFeature) (float32, int32, error) {
+	var confidenceLevel float32
+	var faceFeatureInfo C.ASF_FaceFeatureInfo
+	res := C.ASFFaceFeatureCompare_Search(engine, &feature, &confidenceLevel,
+		&faceFeatureInfo)
+	if res != C.MOK {
+		err := newError(int(res), "destroy fail")
+		return 0, faceFeatureInfo, err
+	} else {
+		return confidenceLevel, faceFeatureInfo.searchId, nil
+	}
+
+}
+
+func (engine *FaceEngine) GetFaceCount() (int32, error) {
+	var faceNum int32
+	res := C.ASFGetFaceCount(engine, &faceNum)
+	if res == C.MOK {
+		err := newError(int(res), "获取人脸数量失败 fail")
+		return 0, err
+	}
+	return faceNum, nil
+
+}

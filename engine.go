@@ -2,9 +2,10 @@ package faceengine
 
 /*
 #cgo CFLAGS		: -I./include
-#cgo LDFLAGS	: -L${SRCDIR}/libs/linux_x64 -larcsoft_face -larcsoft_face_engine
+#cgo LDFLAGS	: -L${SRCDIR}/libs/linux_x64 -larcsoft_face
 #include <stdlib.h>
 #include "merror.h"
+#include "asvloffscreen.h"
 #include "arcsoft_face_sdk.h"
 */
 import "C"

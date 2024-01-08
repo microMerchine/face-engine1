@@ -2,10 +2,9 @@ package faceengine
 
 /*
 #cgo CFLAGS		: -I./include
-#cgo LDFLAGS	: -lrxx
+#cgo LDFLAGS	: -L${SRCDIR}/libs/linux_x64 -larcsoft_face -larcsoft_face_engine
 #include <stdlib.h>
 #include "merror.h"
-#include "asvloffscreen.h"
 #include "arcsoft_face_sdk.h"
 */
 import "C"
@@ -201,10 +200,10 @@ const (
 //
 // 如果调用初始化函数失败则返回一个错误
 func NewFaceEngine(
-	detectMode C.ASF_DetectMode,         // 检测模式
+	detectMode C.ASF_DetectMode, // 检测模式
 	orientPriority C.ASF_OrientPriority, // 检测角度
-	maxFaceNum C.MInt32,                 // 最大人脸数[1-50]
-	combinedMask C.MInt32,               // 检测选项
+	maxFaceNum C.MInt32, // 最大人脸数[1-50]
+	combinedMask C.MInt32, // 检测选项
 ) (*FaceEngine, error) {
 	engine, err := &FaceEngine{}, error(nil)
 	r := C.ASFInitEngine(detectMode, orientPriority, maxFaceNum, combinedMask, &engine.handle)
@@ -278,10 +277,10 @@ func GetActiveDeviceInfo() ([]byte, error) {
 
 // DetectFaces 人脸检测，目前不支持IR图像数据检测
 func (engine *FaceEngine) DetectFaces(
-	width int,       // 宽度
-	height int,      // 高度
+	width int, // 宽度
+	height int, // 高度
 	format C.MInt32, // 图像格式
-	imgData []byte,  // 图片数据
+	imgData []byte, // 图片数据
 ) (faceInfo MultiFaceInfo, err error) {
 	asfFaceInfo := &C.ASF_MultiFaceInfo{}
 	r := C.ASFDetectFaces(engine.handle,
@@ -363,12 +362,12 @@ func (engine *FaceEngine) DetectFacesEx(imageData ImageData) (faceInfo MultiFace
 // Process 年龄/性别/人脸3D角度（该接口仅支持RGB图像），最多支持4张人脸信息检测，超过部分返回未知
 // RGB活体仅支持单人脸检测，该接口不支持检测IR活体
 func (engine *FaceEngine) Process(
-	width int,                   // 宽度
-	height int,                  // 高度
-	format C.MInt32,             // 图像格式
-	imgData []byte,              // 图片数据
+	width int, // 宽度
+	height int, // 高度
+	format C.MInt32, // 图像格式
+	imgData []byte, // 图片数据
 	detectedFaces MultiFaceInfo, // 多人脸信息
-	combinedMask C.MInt32,       // 检测选项
+	combinedMask C.MInt32, // 检测选项
 ) error {
 	r := C.ASFProcess(engine.handle,
 		C.MInt32(width),
@@ -396,12 +395,12 @@ func (engine *FaceEngine) ProcessEx(imageData ImageData, faceInfo MultiFaceInfo,
 
 // ProcessIR 该接口目前仅支持单人脸IR活体检测（不支持年龄、性别、3D角度的检测），默认取第一张人脸
 func (engine *FaceEngine) ProcessIR(
-	width int,                   // 宽度
-	height int,                  // 高度
-	format C.MInt32,             // 图像格式
-	imgData []byte,              // 图片数据
+	width int, // 宽度
+	height int, // 高度
+	format C.MInt32, // 图像格式
+	imgData []byte, // 图片数据
 	detectedFaces MultiFaceInfo, // 多人脸信息
-	combinedMask C.MInt32,       // 检测选项
+	combinedMask C.MInt32, // 检测选项
 ) (err error) {
 	r := C.ASFProcess(engine.handle,
 		C.MInt32(width),
@@ -420,9 +419,9 @@ func (engine *FaceEngine) ProcessIR(
 //
 // 该接口与 ProcessIR 功能一致，但采用结构体的形式传入图像数据，对更高精度的图像兼容性更好
 func (engine *FaceEngine) ProcessExIR(
-	imageData ImageData,    // 图像数据
+	imageData ImageData, // 图像数据
 	faceInfo MultiFaceInfo, // 多人脸信息
-	combinedMask C.MInt32,  // 检测选项
+	combinedMask C.MInt32, // 检测选项
 ) (err error) {
 	r := C.ASFProcessEx_IR(engine.handle, imageDataToASVLOFFSCREEN(imageData), faceInfo.native, combinedMask)
 	if r != C.MOK {
@@ -458,13 +457,13 @@ func (engine *FaceEngine) GetVersion() Version {
 
 // FaceFeatureExtract 单人脸特征提取
 func (engine *FaceEngine) FaceFeatureExtract(
-	width int,               // 宽度
-	height int,              // 高度
-	format C.MInt32,         // 图像格式
-	imgData []byte,          // 图片数据
+	width int, // 宽度
+	height int, // 高度
+	format C.MInt32, // 图像格式
+	imgData []byte, // 图片数据
 	faceInfo SingleFaceInfo, // 单人脸信息
-	registerOrNot int,       // 图片模式
-	mask int,                // 是否带口罩
+	registerOrNot int, // 图片模式
+	mask int, // 是否带口罩
 ) (faceFeature FaceFeature, err error) {
 	asfFaceFeature := &C.ASF_FaceFeature{}
 	asfFaceInfo := &C.ASF_SingleFaceInfo{
@@ -508,10 +507,10 @@ func (engine *FaceEngine) FaceFeatureExtract(
 //
 // 该接口与 ASFFaceFeatureExtract 功能一致，但采用结构体的形式传入图像数据，对更高精度的图像兼容性更好
 func (engine *FaceEngine) FaceFeatureExtractEx(
-	imageData ImageData,     // 图片数据
+	imageData ImageData, // 图片数据
 	faceInfo SingleFaceInfo, // 单人脸信息
-	registerOrNot int,       // 图片模式
-	mask int,                // 是否带口罩
+	registerOrNot int, // 图片模式
+	mask int, // 是否带口罩
 ) (feature FaceFeature, err error) {
 	asfFaceFeature := &C.ASF_FaceFeature{}
 	asfFaceInfo := &C.ASF_SingleFaceInfo{
@@ -628,10 +627,10 @@ func (engine *FaceEngine) GetMask() (maskInfo MaskInfo, err error) {
 
 // UpdateFaceData 更新人脸数据
 func (engine *FaceEngine) UpdateFaceData(
-	width int,              // 宽度
-	height int,             // 高度
-	format C.MInt32,        // 图像格式
-	imgData []byte,         // 图片数据
+	width int, // 宽度
+	height int, // 高度
+	format C.MInt32, // 图像格式
+	imgData []byte, // 图片数据
 	faceInfo MultiFaceInfo, // 多人脸信息
 ) (err error) {
 	r := C.ASFUpdateFaceData(engine.handle, C.MInt32(width), C.MInt32(height), format, (*C.MUInt8)(unsafe.Pointer(&imgData[0])), faceInfo.native)
@@ -643,12 +642,12 @@ func (engine *FaceEngine) UpdateFaceData(
 
 // ImageQualityDetect 单人脸图片质量检测
 func (engine *FaceEngine) ImageQualityDetect(
-	width int,               // 宽度
-	height int,              // 高度
-	format C.MInt32,         // 图像格式
-	imgData []byte,          // 图片数据
+	width int, // 宽度
+	height int, // 高度
+	format C.MInt32, // 图像格式
+	imgData []byte, // 图片数据
 	faceInfo SingleFaceInfo, // 单人脸信息
-	isMask int,              // 是否带口罩
+	isMask int, // 是否带口罩
 ) (confidenceLevel float32, err error) {
 	asfFaceInfo := &C.ASF_SingleFaceInfo{
 		C.MRECT{
